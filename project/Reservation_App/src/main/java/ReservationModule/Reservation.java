@@ -3,7 +3,7 @@ package ReservationModule;
 import java.time.LocalTime;
 import java.time.LocalDate;
 
-public class Reservation implements Notify, Pending, Reservation_Priority{
+public class Reservation implements ΙNotify, ΙPending, ΙReservation_Priority{
     Student student;
     Professor professor;
     LocalDate date;

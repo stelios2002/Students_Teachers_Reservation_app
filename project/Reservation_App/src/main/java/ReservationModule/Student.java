@@ -1,6 +1,6 @@
 package ReservationModule;
 
-public class Student extends User implements  Signup, Do_Reservation, Show_Reservation, Delete_Reservation{
+public class Student extends User implements  ΙSignup, ΙDo_Reservation, ΙShow_Reservation, ΙDelete_Reservation{
     String department;
     String school;
     int year;

@@ -1,6 +1,6 @@
 package ReservationModule;
 
-public class Professor extends User implements Signup, Accept_Reservation, Show_Reservation, Postpone_Reservation{
+public class Professor extends User implements ΙSignup, ΙAccept_Reservation, ΙShow_Reservation, ΙPostpone_Reservation{
     String department;
     String school;
     String specialty;

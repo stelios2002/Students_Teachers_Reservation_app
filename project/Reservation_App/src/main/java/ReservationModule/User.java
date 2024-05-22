@@ -1,6 +1,6 @@
 package ReservationModule;
 
-public abstract class User implements Login, Logout {
+public abstract class User implements ΙLogin, ΙLogout {
     private String username;
     private String password;
     private String name;
