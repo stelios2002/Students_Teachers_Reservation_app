@@ -34,7 +34,7 @@ public class UsersDao {
 		System.out.println(INSERT_USER_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ADMIN_SQL)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
 			preparedStatement.setString(1, user.getUsername());
 			preparedStatement.setString(2, user.getPassword());
 			preparedStatement.setString(3, user.getName());

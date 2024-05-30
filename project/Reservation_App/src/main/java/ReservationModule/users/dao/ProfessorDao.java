@@ -35,7 +35,7 @@ public class ProfessorDao {
 		System.out.println(INSERT_PROFESSOR_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ADMIN_SQL)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PROFESSOR_SQL)) {
 			preparedStatement.setString(1, professor.getUsername());
 			preparedStatement.setString(2, professor.getPassword());
 			preparedStatement.setString(3, professor.getName());
