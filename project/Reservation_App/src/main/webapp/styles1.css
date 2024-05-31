@@ -142,7 +142,7 @@ input {
 
 input[type="submit"] {
   color: hsl(var(--bgColorH), var(--bgColorS), var(--bgColorL));
-  background:#ADD8E6;
+  background:#333;
   font-size: 0.75rem;
   font-weight: bold;
   margin-top: 0.625rem;
@@ -214,16 +214,15 @@ input[type="checkbox"]:checked + label span::after {
   outline-offset: 2px;
   background: hsl(var(--fgColorH), var(--fgColorS), var(--fgColorL));
 }
-
 .content {
-        padding-top: 5px; /* Adds space to account for the fixed menu */
-        background-color:#333;
+        padding-top: 5px;
+        background-color: #333;
         color:white;
-       
-     	display: inline-block; /* Prevents stretching to full width */
-        border: 1px solid #000; /* Optional: to visualize the div boundaries */
-        padding: 10px;
     }
+
+
+
+    
 
 
 
