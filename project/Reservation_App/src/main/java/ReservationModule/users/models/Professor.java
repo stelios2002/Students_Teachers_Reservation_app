@@ -31,7 +31,7 @@ public class Professor extends User{
     }
 
 
-    public Professor(String username, String password, String name, String surname, String id, int role, String department, String school, String specialty){
+    public Professor(String username, String password, String name, String surname, int role, String department, String school, String specialty, String id){
         super(username, password, name, id, role);
         setDepartment(department);
         setSchool(school);

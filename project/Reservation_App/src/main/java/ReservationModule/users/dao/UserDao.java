@@ -4,17 +4,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
-import ReservationModule.users.models.Student;
+import ReservationModule.users.models.User;
 
-public class StudentDao {
+public class UserDao {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
-	private static final String INSERT_STUDENT_SQL = "INSERT INTO users" 
-	+ "  (username, password, name, surname, role) VALUES (?, ?, ?, ?, ?); " + "INSERT INTO students" 
-	+ "  (department, school, year, id) VALUES (?, ?, ?, ?); ";
+	private static final String INSERT_USER_SQL = "INSERT INTO users" 
+	+ "  (username, password, name, surname, role) VALUES (?, ?, ?, ?, ?); ";
 
 	protected Connection getConnection() {
 		Connection connection = null;
@@ -31,20 +31,16 @@ public class StudentDao {
 		return connection;
 	}
 
-	public void insertStudent(Student student) throws SQLException {
-		System.out.println(INSERT_STUDENT_SQL);
+	public void insertUser(User user) throws SQLException {
+		System.out.println(INSERT_USER_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_STUDENT_SQL)) {
-			preparedStatement.setString(1, student.getUsername());
-			preparedStatement.setString(2, student.getPassword());
-			preparedStatement.setString(3, student.getName());
-			preparedStatement.setString(4, student.getSurname());
-			preparedStatement.setInt(5, student.getRole());
-			preparedStatement.setString(6, student.getDepartment());
-			preparedStatement.setString(7, student.getSchool());
-			preparedStatement.setInt(8, student.getYear());
-			preparedStatement.setString(9, student.getId());
+				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
+			preparedStatement.setString(1, user.getUsername());
+			preparedStatement.setString(2, user.getPassword());
+			preparedStatement.setString(3, user.getName());
+			preparedStatement.setString(4, user.getSurname());
+			preparedStatement.setInt(5, user.getRole());
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -52,8 +48,13 @@ public class StudentDao {
 		}
 	}
 
-	public Student getStudent(String parameter) {
+	public List<User> selectAllUsers() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public static void deleteUser(String username) {
+		// TODO Auto-generated method stub
+		
 	}
 }

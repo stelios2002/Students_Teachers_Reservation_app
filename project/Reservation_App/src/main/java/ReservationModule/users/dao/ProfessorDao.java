@@ -31,7 +31,7 @@ public class ProfessorDao {
 		return connection;
 	}
 
-	public void insertUser(Professor professor) throws SQLException {
+	public void insertProfessor(Professor professor) throws SQLException {
 		System.out.println(INSERT_PROFESSOR_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
@@ -50,5 +50,10 @@ public class ProfessorDao {
 		} catch (SQLException e) {
 			System.out.println(e.getStackTrace());
 		}
+	}
+
+	public Professor getProfessor(String parameter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
