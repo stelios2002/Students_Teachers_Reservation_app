@@ -11,12 +11,12 @@ import java.text.SimpleDateFormat;
 import ReservationModule.utils.models.Reservation;
 
 public class ReservationDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
 	private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservations" 
-	+ "  (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?); ";
+	+ "  (studid, profid, date, time, room, id) VALUES (?, ?, ?, ?, ?, ?); ";
 
 	protected Connection getConnection() {
 		Connection connection = null;
@@ -33,7 +33,7 @@ public class ReservationDao {
 		return connection;
 	}
 
-	public void insertAdmin(Reservation reservation) throws SQLException, ParseException {
+	public void insertReservation(Reservation reservation) throws SQLException, ParseException {
 		System.out.println(INSERT_RESERVATION_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
@@ -53,5 +53,10 @@ public class ReservationDao {
 		} catch (SQLException e) {
 			System.out.println(e.getStackTrace());
 		}
+	}
+
+	public void deleteReservation(String id) {
+		// TODO Auto-generated method stub
+		
 	}
 }
