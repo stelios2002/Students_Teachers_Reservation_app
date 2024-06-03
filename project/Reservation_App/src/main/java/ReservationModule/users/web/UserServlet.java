@@ -1,60 +1,158 @@
-package ReservationModule.users.dao;
+package ReservationModule.users.web;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import ReservationModule.users.dao.ProfessorDao;
+import ReservationModule.users.dao.StudentDao;
+import ReservationModule.users.dao.UserDao;
+import ReservationModule.users.models.Professor;
+import ReservationModule.users.models.Student;
 import ReservationModule.users.models.User;
+import ReservationModule.utils.dao.ReservationDao;
+import ReservationModule.utils.models.Reservation;
 
-public class UserDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
-	private String jdbcUsername = "root";
-	private String jdbcPassword = "root";
+/**
+ * Servlet implementation class AdminServlet
+ */
+@WebServlet("/UserServlet")
+public class UserServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private StudentDao studentDao = new StudentDao();
+	private ProfessorDao professorDao = new ProfessorDao();
+	private ReservationDao reservationDao = new ReservationDao();
+	private UserDao userDao = new UserDao();
+	
 
-	private static final String INSERT_USER_SQL = "INSERT INTO users" 
-	+ "  (username, password, name, surname, role) VALUES (?, ?, ?, ?, ?); ";
+	public LocalDate convertToLocalDateViaMilisecond(java.util.Date dateToConvert) {
+	    return Instant.ofEpochMilli(dateToConvert.getTime())
+	      .atZone(ZoneId.systemDefault())
+	      .toLocalDate();
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
 
-	protected Connection getConnection() {
-		Connection connection = null;
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String action = request.getServletPath();
+
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			switch (action) {
+			case "/new_reservation":
+				commitReservation(request, response);
+				break;
+			case "/delete_user":
+				deleteUser(request, response);
+				break;
+			case "/delete_reservation":
+				deleteReservation(request, response);
+				break;
+			case "/register_student":
+				insertStudent(request, response);
+				break;
+			case "/register_professor":
+				insertProfessor(request, response);
+			case "/login":
+				login(request, response);
+				break;
+			case "/logout":
+				logout(request, response);
+				break;
+			default:
+				listUser(request, response);
+				break;
+			}
+		} catch (SQLException ex) {
+			throw new ServletException(ex);
 		}
-		return connection;
 	}
 
-	public void insertUser(User user) throws SQLException {
-		System.out.println(INSERT_USER_SQL);
-		// try-with-resource statement will auto close the connection.
-		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
-			preparedStatement.setString(1, user.getUsername());
-			preparedStatement.setString(2, user.getPassword());
-			preparedStatement.setString(3, user.getName());
-			preparedStatement.setString(4, user.getSurname());
-			preparedStatement.setInt(5, user.getRole());
-			System.out.println(preparedStatement);
-			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println(e.getStackTrace());
-		}
+	private void deleteReservation(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		String id = request.getParameter("id");
+		reservationDao.deleteReservation(id);
+		response.sendRedirect("list");
 	}
 
-	public List<User> selectAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+	private void listUser(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, ServletException {
+		List<User> listUser = userDao.selectAllUsers();
+		request.setAttribute("listUser", listUser);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
+		dispatcher.forward(request, response);
+	}
+	
+	private void insertStudent(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		String username = request.getParameter("username");
+		String name = request.getParameter("name");
+		String surname = request.getParameter("surname");
+		String password = request.getParameter("password");
+		int role = 2;
+		String dept = request.getParameter("dept");
+		String school = request.getParameter("school");
+		int year = Integer.parseInt(request.getParameter("year"));
+		String id = request.getParameter("id");
+		Student newStudent = new Student(username, password, name, surname, role, dept, school, year, id);
+		studentDao.insertStudent(newStudent);
+		response.sendRedirect("index.jsp");
+	}
+	
+	private void insertProfessor(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		String username = request.getParameter("username");
+		String name = request.getParameter("name");
+		String surname = request.getParameter("surname");
+		String password = request.getParameter("password");
+		int role = 3;
+		String dept = request.getParameter("dept");
+		String school = request.getParameter("school");
+		String speciality = request.getParameter("speciality");
+		String id = request.getParameter("id");
+		Professor newSeller = new Professor(username, password, name, surname, role, dept, school, speciality, id);
+		professorDao.insertProfessor(newSeller);
+		response.sendRedirect("index.jsp");
 	}
 
-	public void deleteUser(String username) {
-		// TODO Auto-generated method stub
-		
+	private void deleteUser(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		String username = request.getParameter("username");
+		userDao.deleteUser(username);
+		response.sendRedirect("list");
 	}
+	
+	private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException, ParseException {
+		Student student = studentDao.getStudent(request.getParameter("student_id"));
+		Professor professor = professorDao.getProfessor(request.getParameter("professor_id"));;
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");//uuuu-MM-dd
+		java.util.Date date = isoFormat.parse(request.getParameter("date"));
+		LocalDate myDate = convertToLocalDateViaMilisecond(date);
+		LocalTime time = LocalTime.parse(request.getParameter("time"));
+		int room = Integer.parseInt(request.getParameter("room"));
+		String id = request.getParameter("id");
+		Reservation reservation = new Reservation(student, professor, myDate, time, room, id);
+		reservationDao.insertReservation(reservation);
+		response.sendRedirect("list");
+	}
+	
+	
+
 }
