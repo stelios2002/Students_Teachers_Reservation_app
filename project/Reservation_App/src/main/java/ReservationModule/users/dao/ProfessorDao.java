@@ -8,13 +8,13 @@ import java.sql.SQLException;
 import ReservationModule.users.models.Professor;
 
 public class ProfessorDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
 	private static final String INSERT_PROFESSOR_SQL = "INSERT INTO users" 
 	+ "  (username, password, name, surname, role) VALUES (?, ?, ?, ?, ?); " + "INSERT INTO professors" 
-	+ "  (department, school, year, id) VALUES (?, ?, ?, ?); ";
+	+ "  (username, department, school, specialty, id) VALUES (?, ?, ?, ?); ";
 
 	protected Connection getConnection() {
 		Connection connection = null;

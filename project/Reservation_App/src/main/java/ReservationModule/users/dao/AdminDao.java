@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import ReservationModule.users.models.Admin;
 
 public class AdminDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 

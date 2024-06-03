@@ -8,13 +8,13 @@ import java.sql.SQLException;
 import ReservationModule.users.models.Student;
 
 public class StudentDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
 	private static final String INSERT_STUDENT_SQL = "INSERT INTO users" 
 	+ "  (username, password, name, surname, role) VALUES (?, ?, ?, ?, ?); " + "INSERT INTO students" 
-	+ "  (department, school, year, id) VALUES (?, ?, ?, ?); ";
+	+ "  (username, department, school, year, id) VALUES (?, ?, ?, ?); ";
 
 	protected Connection getConnection() {
 		Connection connection = null;
@@ -41,10 +41,11 @@ public class StudentDao {
 			preparedStatement.setString(3, student.getName());
 			preparedStatement.setString(4, student.getSurname());
 			preparedStatement.setInt(5, student.getRole());
-			preparedStatement.setString(6, student.getDepartment());
-			preparedStatement.setString(7, student.getSchool());
-			preparedStatement.setInt(8, student.getYear());
-			preparedStatement.setString(9, student.getId());
+			preparedStatement.setString(6, student.getUsername());
+			preparedStatement.setString(7, student.getDepartment());
+			preparedStatement.setString(8, student.getSchool());
+			preparedStatement.setInt(9, student.getYear());
+			preparedStatement.setString(10, student.getId());
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {

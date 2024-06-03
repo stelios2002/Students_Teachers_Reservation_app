@@ -9,7 +9,7 @@ import java.util.List;
 import ReservationModule.users.models.User;
 
 public class UserDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
@@ -53,7 +53,7 @@ public class UserDao {
 		return null;
 	}
 
-	public static void deleteUser(String username) {
+	public void deleteUser(String username) {
 		// TODO Auto-generated method stub
 		
 	}
