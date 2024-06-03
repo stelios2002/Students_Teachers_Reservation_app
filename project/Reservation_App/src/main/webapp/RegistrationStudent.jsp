@@ -14,7 +14,7 @@
 
 
 <div class="contentRegister">
-<form id="register-form" class="register-form" autocomplete="off">
+<form id="register-form" class="register-form" autocomplete="off" action="<%=request.getContextPath()%>/register_student">
 <h1 class="a11y-hidden">Registration Form</h1>
   <input type="checkbox" name="show-password" class="show-password a11y-hidden" id="show-password" tabindex="2" />
   <label class="label-show-password" for="show-password">
@@ -22,7 +22,7 @@
   </label>
   <div>
     <label class="label-id">
-      <input type="text" class="text" name="idStudent" placeholder="Student Id" tabindex="4" required />
+      <input type="text" class="text" name="id" placeholder="Student Id" tabindex="4" required />
       <span class="required">Personal Id</span>
     </label>
   </div>
@@ -33,20 +33,26 @@
     </label>
   </div>
   <div>
+    <label class="label-surname">
+      <input type="text" class="text" name="surname" placeholder="Name" tabindex="4" required />
+      <span class="required">Surname</span>
+    </label>
+  </div>
+  <div>
     <label class="label-department">
-      <input type="text" class="text" name="departmentStudent" placeholder="Department" tabindex="5" required />
+      <input type="text" class="text" name="dept" placeholder="Department" tabindex="5" required />
       <span class="required">Department</span>
     </label>
   </div>
   <div>
     <label class="label-school">
-      <input type="text" class="text" name="schoolStudent" placeholder="School" tabindex="5" required />
+      <input type="text" class="text" name="school" placeholder="School" tabindex="5" required />
       <span class="required">School</span>
     </label>
   </div>
   <div>
     <label class="label-year">
-      <input type="number" class="text" name="yearStudent" placeholder="Year" tabindex="5" required />
+      <input type="number" class="text" name="year" placeholder="Year" tabindex="5" required />
       <span class="required">Year</span>
     </label>
   </div>
