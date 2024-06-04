@@ -14,7 +14,8 @@
 
 
 <div class="contentRegister">
-<form id="register-form" class="register-form" autocomplete="off" action="<%=request.getContextPath()%>/register" method="post">
+<form id="register-form" class="register-form" autocomplete="off" action="<%=request.getContextPath()%>/user" method="post">
+<input type="hidden" name="action" value="registerStudent" />
 <h1 class="a11y-hidden">Registration Form</h1>
   <input type="checkbox" name="show-password" class="show-password a11y-hidden" id="show-password" tabindex="2" />
   <label class="label-show-password" for="show-password">
@@ -28,7 +29,7 @@
   </div>
   <div>
     <label class="label-name">
-      <input type="text" class="text" name="name" placeholder="Name" tabindex="4" required />
+      <input type="text" class="text" name="first_name" placeholder="Name" tabindex="4" required />
       <span class="required">Name</span>
     </label>
   </div>

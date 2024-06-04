@@ -13,7 +13,8 @@
 
 
 <div class="contentRegister">
-<form id="register-form" class="register-form" autocomplete="off">
+<form id="register-form" class="register-form" autocomplete="off" action="<%=request.getContextPath()%>/user" method="post">
+<input type="hidden" name="action" value="registerProfessor" />
 <h1 class="a11y-hidden">Registration Form</h1>
   <input type="checkbox" name="show-password" class="show-password a11y-hidden" id="show-password" tabindex="2" />
   <label class="label-show-password" for="show-password">
@@ -21,25 +22,31 @@
   </label>
   <div>
     <label class="label-id">
-      <input type="text" class="text" name="idProfessor" placeholder="Professor Id" tabindex="4" required />
+      <input type="text" class="text" name="id" placeholder="Professor Id" tabindex="4" required />
       <span class="required">Personal Id</span>
     </label>
   </div>
   <div>
     <label class="label-name">
-      <input type="text" class="text" name="name" placeholder="Name" tabindex="4" required />
+      <input type="text" class="text" name="first_name" placeholder="Name" tabindex="4" required />
       <span class="required">Name</span>
     </label>
   </div>
   <div>
+    <label class="label-surname">
+      <input type="text" class="text" name="surname" placeholder="Name" tabindex="4" required />
+      <span class="required">Surname</span>
+    </label>
+  </div>
+  <div>
     <label class="label-department">
-      <input type="text" class="text" name="departmentProfessor" placeholder="Department" tabindex="5" required />
+      <input type="text" class="text" name="dept" placeholder="Department" tabindex="5" required />
       <span class="required">Department</span>
     </label>
   </div>
   <div>
     <label class="label-school">
-      <input type="text" class="text" name="schoolProffesor" placeholder="School" tabindex="5" required />
+      <input type="text" class="text" name="school" placeholder="School" tabindex="5" required />
       <span class="required">School</span>
     </label>
   </div>
