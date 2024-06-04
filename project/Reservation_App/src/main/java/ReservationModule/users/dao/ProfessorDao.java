@@ -8,13 +8,13 @@ import java.sql.SQLException;
 import ReservationModule.users.models.Professor;
 
 public class ProfessorDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://127.0.0.1:3306/reservationdb";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
-	private static final String INSERT_PROFESSOR_SQL = "INSERT INTO users" 
-	+ "  (username, password, name, surname, role) VALUES (?, ?, ?, ?, ?); " + "INSERT INTO professors" 
-	+ "  (username, department, school, specialty, id) VALUES (?, ?, ?, ?); ";
+	private static final String INSERT_USER_SQL = "INSERT INTO user (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?)";
+	private static final String INSERT_PROFESSOR_SQL = "INSERT INTO professor (username, department, school, specialty, id) VALUES (?, ?, ?, ?, ?)";
+
 
 	protected Connection getConnection() {
 		Connection connection = null;
@@ -35,18 +35,22 @@ public class ProfessorDao {
 		System.out.println(INSERT_PROFESSOR_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PROFESSOR_SQL)) {
-			preparedStatement.setString(1, professor.getUsername());
-			preparedStatement.setString(2, professor.getPassword());
-			preparedStatement.setString(3, professor.getName());
-			preparedStatement.setString(4, professor.getSurname());
-			preparedStatement.setInt(5, professor.getRole());
-			preparedStatement.setString(6, professor.getDepartment());
-			preparedStatement.setString(7, professor.getSchool());
-			preparedStatement.setString(8, professor.getSpecialty());
-			preparedStatement.setString(9, professor.getId());
-			System.out.println(preparedStatement);
-			preparedStatement.executeUpdate();
+				PreparedStatement userStatement = connection.prepareStatement(INSERT_USER_SQL);
+	            PreparedStatement professorStatement = connection.prepareStatement(INSERT_PROFESSOR_SQL)) {
+			userStatement.setString(1, professor.getUsername());
+            userStatement.setString(2, professor.getPassword());
+            userStatement.setString(3, professor.getName());
+            userStatement.setString(4, professor.getSurname());
+            userStatement.setInt(5, professor.getRole());
+            userStatement.executeUpdate();
+            
+            // Set parameters for student table
+            professorStatement.setString(1, professor.getUsername());
+            professorStatement.setString(2, professor.getDepartment());
+            professorStatement.setString(3, professor.getSchool());
+            professorStatement.setString(4, professor.getSpecialty());
+            professorStatement.setString(5, professor.getId());
+            professorStatement.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getStackTrace());
 		}

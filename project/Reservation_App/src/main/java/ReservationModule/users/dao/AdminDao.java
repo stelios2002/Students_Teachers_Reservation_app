@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import ReservationModule.users.models.Admin;
 
 public class AdminDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
-	private static final String INSERT_ADMIN_SQL = "INSERT INTO users" 
+	private static final String INSERT_ADMIN_SQL = "INSERT INTO user" 
 	+ "  (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?); ";
 
 	protected Connection getConnection() {

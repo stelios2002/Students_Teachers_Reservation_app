@@ -8,13 +8,14 @@ import java.sql.SQLException;
 import ReservationModule.users.models.Student;
 
 public class StudentDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://127.0.0.1:3306/reservationdb";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
+	
+	private static final String INSERT_USER_SQL = "INSERT INTO user (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?)";
+	private static final String INSERT_STUDENT_SQL = "INSERT INTO student (username, department, school, year, id) VALUES (?, ?, ?, ?, ?)";
 
-	private static final String INSERT_STUDENT_SQL = "INSERT INTO users" 
-	+ "  (username, password, name, surname, role) VALUES (?, ?, ?, ?, ?); " + "INSERT INTO students" 
-	+ "  (username, department, school, year, id) VALUES (?, ?, ?, ?); ";
+	
 
 	protected Connection getConnection() {
 		Connection connection = null;
@@ -33,21 +34,25 @@ public class StudentDao {
 
 	public void insertStudent(Student student) throws SQLException {
 		System.out.println(INSERT_STUDENT_SQL);
+		System.out.println(INSERT_USER_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_STUDENT_SQL)) {
-			preparedStatement.setString(1, student.getUsername());
-			preparedStatement.setString(2, student.getPassword());
-			preparedStatement.setString(3, student.getName());
-			preparedStatement.setString(4, student.getSurname());
-			preparedStatement.setInt(5, student.getRole());
-			preparedStatement.setString(6, student.getUsername());
-			preparedStatement.setString(7, student.getDepartment());
-			preparedStatement.setString(8, student.getSchool());
-			preparedStatement.setInt(9, student.getYear());
-			preparedStatement.setString(10, student.getId());
-			System.out.println(preparedStatement);
-			preparedStatement.executeUpdate();
+				PreparedStatement userStatement = connection.prepareStatement(INSERT_USER_SQL);
+	            PreparedStatement studentStatement = connection.prepareStatement(INSERT_STUDENT_SQL)) {
+			userStatement.setString(1, student.getUsername());
+            userStatement.setString(2, student.getPassword());
+            userStatement.setString(3, student.getName());
+            userStatement.setString(4, student.getSurname());
+            userStatement.setInt(5, student.getRole());
+            userStatement.executeUpdate();
+            
+            // Set parameters for student table
+            studentStatement.setString(1, student.getUsername());
+            studentStatement.setString(2, student.getDepartment());
+            studentStatement.setString(3, student.getSchool());
+            studentStatement.setInt(4, student.getYear());
+            studentStatement.setString(5, student.getId());
+            studentStatement.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getStackTrace());
 		}

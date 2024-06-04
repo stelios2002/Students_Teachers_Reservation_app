@@ -9,12 +9,12 @@ import java.util.List;
 import ReservationModule.users.models.User;
 
 public class UserDao {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
-	private static final String INSERT_USER_SQL = "INSERT INTO users" 
-	+ "  (username, password, name, surname, role) VALUES (?, ?, ?, ?, ?); ";
+	private static final String INSERT_USER_SQL = "INSERT INTO user" 
+	+ "  (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?); ";
 
 	protected Connection getConnection() {
 		Connection connection = null;
