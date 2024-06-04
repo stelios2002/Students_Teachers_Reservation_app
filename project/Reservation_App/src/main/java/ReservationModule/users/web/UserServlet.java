@@ -26,60 +26,63 @@ import ReservationModule.users.models.User;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 
-@WebServlet("/UserServlet/*")
+@WebServlet("/register")
 public class UserServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private StudentDao studentDao = new StudentDao();
-    private ProfessorDao professorDao = new ProfessorDao();
-    private ReservationDao reservationDao = new ReservationDao();
-    private UserDao userDao = new UserDao();
-    
-    public LocalDate convertToLocalDateViaMilisecond(java.util.Date dateToConvert) {
-        return Instant.ofEpochMilli(dateToConvert.getTime())
-          .atZone(ZoneId.systemDefault())
-          .toLocalDate();
+	 private static final long serialVersionUID = 1L;
+	    private StudentDao studentDao = new StudentDao();
+	    private ProfessorDao professorDao = new ProfessorDao();
+	    private ReservationDao reservationDao = new ReservationDao();
+	    private UserDao userDao = new UserDao();
+	    
+	    public LocalDate convertToLocalDateViaMilisecond(java.util.Date dateToConvert) {
+	        return Instant.ofEpochMilli(dateToConvert.getTime())
+	          .atZone(ZoneId.systemDefault())
+	          .toLocalDate();
+	    }
+
+    public void init() {
+    	StudentDao studentDao = new StudentDao();
+	    ProfessorDao professorDao = new ProfessorDao();
+	    ReservationDao reservationDao = new ReservationDao();
+	    UserDao userDao = new UserDao();
     }
-    
+        
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
+    	    throws ServletException, IOException {
+		    	 String username = request.getParameter("username");
+		         String name = request.getParameter("name");
+		         String surname = request.getParameter("surname");
+		         String password = request.getParameter("password");
+		         int role = 2;
+		         String dept = request.getParameter("dept");
+		         String school = request.getParameter("school");
+		         int year = Integer.parseInt(request.getParameter("year"));
+		         String id = request.getParameter("id");
+		         Student newStudent = new Student(username, password, name, surname, role, dept, school, year, id);
+		         //studentDao.insertStudent(newStudent);
+		         /*newStudent.setName(name);
+		 		 newStudent.setSurname(surname);
+		 		 newStudent.setUsername(username);
+		 		 newStudent.setPassword(dept);
+		 		 newStudent.setYear(year);
+		 		 newStudent.setSchool(school);*/
+		 		
+    	       
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = request.getPathInfo();
+    	        try {
+    	           studentDao.insertStudent(newStudent);
+    	        } catch (Exception e) {
+    	            // TODO Auto-generated catch block
+    	            e.printStackTrace();
+    	        }
 
-        try {
-            switch (action) {
-                case "/new_reservation":
-                    //commitReservation(request, response);
-                    break;
-                case "/delete_user":
-                    deleteUser(request, response);
-                    break;
-                case "/delete_reservation":
-                    deleteReservation(request, response);
-                    break;
-                case "/register_student":
-                    insertStudent(request, response);
-                    break;
-                case "/register_professor":
-                    insertProfessor(request, response);
-                    break;
-                case "/login":
-                    //login(request, response);
-                    break;
-                case "/logout":
-                    //logout(request, response);
-                    break;
-                default:
-                    listUser(request, response);
-                    break;
-            }
-        } catch (SQLException ex) {
-            throw new ServletException(ex);
-        }
-    }
+    	        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+    	        dispatcher.forward(request, response);
+    	    }
+
+
+    
+    
 
     private void deleteReservation(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException {
@@ -112,7 +115,7 @@ public class UserServlet extends HttpServlet {
         response.sendRedirect("index.jsp");
     }
     
-    private void insertProfessor(HttpServletRequest request, HttpServletResponse response) 
+   /* private void insertProfessor(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException {
         String username = request.getParameter("username");
         String name = request.getParameter("name");
@@ -126,16 +129,16 @@ public class UserServlet extends HttpServlet {
         Professor newProfessor = new Professor(username, password, name, surname, role, dept, school, speciality, id);
         professorDao.insertProfessor(newProfessor);
         response.sendRedirect("index.jsp");
-    }
+    }*/
 
-    private void deleteUser(HttpServletRequest request, HttpServletResponse response) 
+  /*  private void deleteUser(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException {
         String username = request.getParameter("username");
         userDao.deleteUser(username);
         response.sendRedirect("list");
-    }
+    }*/
     
-    private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
+   /* private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException, ParseException {
         Student student = studentDao.getStudent(request.getParameter("student_id"));
         Professor professor = professorDao.getProfessor(request.getParameter("professor_id"));
@@ -149,5 +152,8 @@ public class UserServlet extends HttpServlet {
         reservationDao.insertReservation(reservation);
         response.sendRedirect("list");
     }
+    */
 }
+
+
 
