@@ -29,7 +29,7 @@
   </div>
   <div>
     <label class="label-name">
-      <input type="text" class="text" name="first_name" placeholder="Name" tabindex="4" required />
+      <input type="text" class="text" name="name" placeholder="Name" tabindex="4" required />
       <span class="required">Name</span>
     </label>
   </div>
@@ -78,5 +78,6 @@
   
 
   <br>
+  </div>
 </body>
 </html>
