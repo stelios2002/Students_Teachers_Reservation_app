@@ -215,7 +215,7 @@ input[type="checkbox"]:checked + label span::after {
   background: hsl(var(--fgColorH), var(--fgColorS), var(--fgColorL));
 }
 .content {
-        padding-top: 5px;
+        padding-top: 10px;
         background-color: #333;
         color:white;
     }

@@ -10,15 +10,26 @@
 </head>
 <body>
 
-
-<div class="contentLogin">
-<form id="register-form" class="register-form" autocomplete="off" action="<%=request.getContextPath()%>/user" method="post">
-<input type="hidden" name="action" value="loginUser" />
-<h1 class="a11y-hidden">Login Form</h1>
+<br><br>
+<div>
+<form id="register-form" class="register-form" autocomplete="off">
+<h1 class="a11y-hidden">Registration Form</h1>
   <input type="checkbox" name="show-password" class="show-password a11y-hidden" id="show-password" tabindex="2" />
   <label class="label-show-password" for="show-password">
     <span>Show Password</span>
   </label>
+  <div>
+    <label class="label-fname">
+      <input type="text" class="text" name="fname" placeholder="fname" tabindex="4" required />
+      <span class="required">First Name</span>
+    </label>
+  </div>
+  <div>
+    <label class="label-lname">
+      <input type="text" class="text" name="lname" placeholder="lname" tabindex="5" required />
+      <span class="required">Last Name</span>
+    </label>
+  </div>
   <div>
     <label class="label-username">
       <input type="text" class="text" name="username" placeholder="Username" tabindex="1" required />
@@ -30,14 +41,10 @@
       <input type="text" class="text" name="password" placeholder="Password" tabindex="3" required />
       <span class="required">Password</span>
     </label>
-  </div>
-   	
-  <input type="submit" value="Login"/>
-  
-  
-  
+  </div>	 
+  	
+  <input type="submit" value="Register" />
   </form>
-
-  <br>
+</div>
 </body>
 </html>
