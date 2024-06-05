@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import ReservationModule.users.models.Student;
+import ReservationModule.users.models.User;
 
 public class StudentDao {
 	private String jdbcURL = "jdbc:mysql://127.0.0.1:3306/reservationdb";
@@ -14,6 +15,7 @@ public class StudentDao {
 	
 	private static final String INSERT_USER_SQL = "INSERT INTO user (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?)";
 	private static final String INSERT_STUDENT_SQL = "INSERT INTO student (username, department, school, year, id) VALUES (?, ?, ?, ?, ?)";
+	private static final String LOGIN_STUDENT_SQL = "select * from student where username = ? and password = ? ";
 
 	
 
@@ -56,6 +58,23 @@ public class StudentDao {
 		} catch (SQLException e) {
 			System.out.println(e.getStackTrace());
 		}
+	}
+	public boolean LoginTheStudent(Student student) throws SQLException {
+		boolean status= false;
+		System.out.println(LOGIN_STUDENT_SQL);
+		// try-with-resource statement will auto close the connection.
+		try (Connection connection = getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(LOGIN_STUDENT_SQL)) {
+			preparedStatement.setString(1, student.getUsername());
+			preparedStatement.setString(2, student.getPassword());
+			
+			System.out.println(preparedStatement);
+			preparedStatement.executeQuery();
+			status= preparedStatement.executeQuery().next();
+		} catch (SQLException e) {
+			System.out.println(e.getStackTrace());
+		}
+		return status;
 	}
 
 	public Student getStudent(String parameter) {

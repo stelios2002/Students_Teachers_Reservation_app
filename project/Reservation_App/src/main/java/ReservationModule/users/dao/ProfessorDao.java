@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import ReservationModule.users.models.Professor;
+import ReservationModule.users.models.User;
 
 public class ProfessorDao {
 	private String jdbcURL = "jdbc:mysql://127.0.0.1:3306/reservationdb";
@@ -14,6 +15,9 @@ public class ProfessorDao {
 
 	private static final String INSERT_USER_SQL = "INSERT INTO user (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?)";
 	private static final String INSERT_PROFESSOR_SQL = "INSERT INTO professor (username, department, school, specialty, id) VALUES (?, ?, ?, ?, ?)";
+	private static final String LOGIN_PROFESSOR_SQL = "select * from professor where username = ? and password = ? ";
+	private static final String LOGIN_USER_SQL = "select role from user where username = ? and password = ? ";
+	
 
 
 	protected Connection getConnection() {
@@ -55,6 +59,28 @@ public class ProfessorDao {
 			System.out.println(e.getStackTrace());
 		}
 	}
+	public boolean LoginTheProfessor(Professor professor) throws SQLException {
+		boolean status= false;
+		System.out.println(LOGIN_PROFESSOR_SQL);
+		// try-with-resource statement will auto close the connection.
+		try (Connection connection = getConnection();
+				PreparedStatement userStatement = connection.prepareStatement(LOGIN_USER_SQL);
+				PreparedStatement preparedStatement = connection.prepareStatement(LOGIN_PROFESSOR_SQL)) {
+			userStatement.setInt(5, professor.getRole());
+			userStatement.setString(1, professor.getUsername());
+            userStatement.setString(2, professor.getPassword());
+			preparedStatement.setString(1, professor.getUsername());
+			
+			
+			System.out.println(preparedStatement);
+			preparedStatement.executeQuery();
+			status= preparedStatement.executeQuery().next();
+		} catch (SQLException e) {
+			System.out.println(e.getStackTrace());
+		}
+		return status;
+	}
+	
 
 	public Professor getProfessor(String parameter) {
 		// TODO Auto-generated method stub
