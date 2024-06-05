@@ -1,6 +1,7 @@
 package ReservationModule.users.web;
 
 import java.io.IOException;
+
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,10 +17,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.users.dao.StudentDao;
 import ReservationModule.users.dao.UserDao;
+import ReservationModule.users.models.Admin;
 import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
 import ReservationModule.users.models.User;
@@ -54,6 +57,9 @@ public class UserServlet extends HttpServlet {
                     break;
                 case "deleteReservation":
                     deleteReservation(request, response);
+                    break;
+                case "loginUser":
+                    loginUser(request, response);
                     break;
                 // Add more cases as needed
                 default:
@@ -113,6 +119,32 @@ public class UserServlet extends HttpServlet {
         professorDao.insertProfessor(newProfessor);
         response.sendRedirect("index.jsp");
     }
+   
+        
+    private void loginUser(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        System.out.println("Attempting login for user: " + username);
+
+        User loginUser = userDao.loginUser(username, password);
+        if (loginUser != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("username", username);
+            if (loginUser instanceof Student) {
+                response.sendRedirect("StudentMain.jsp");
+            } else if (loginUser instanceof Professor) {
+                response.sendRedirect("ProfessorMain.jsp");
+            }
+            else if (loginUser instanceof Admin) {
+                response.sendRedirect("AdminMain.jsp");
+            }
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("error", "Invalid username or password");
+            response.sendRedirect("LoginPage.jsp");
+        }
+    }
 
     private void deleteReservation(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
@@ -131,4 +163,3 @@ public class UserServlet extends HttpServlet {
     
     // Add more methods as needed
 }
-
