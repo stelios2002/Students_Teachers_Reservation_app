@@ -3,11 +3,9 @@ package ReservationModule.users.web;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,12 +31,6 @@ public class StudentServlet extends HttpServlet {
         reservationDao = new ReservationDao();
         professorDao = new ProfessorDao();
     }
-
-	private LocalDate convertToLocalDateViaMilisecond(java.util.Date dateToConvert) {
-	    return Instant.ofEpochMilli(dateToConvert.getTime())
-	      .atZone(ZoneId.systemDefault())
-	      .toLocalDate();
-	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			 throws ServletException, IOException {
@@ -54,21 +46,29 @@ public class StudentServlet extends HttpServlet {
 	                	System.out.println("Register action called");
 		                insertStudent(request, response);
 		                break;
-	                case "commitReservation":
-	                    commitReservation(request, response);
-	                    break;
-	                case "showReservationForm":
-	                    showReservations(request, response);
-	                    break;
+	                case "show_reservations":
+	                	showReservations(request, response);
+	                case "commit_reservations":
+	                	commitReservation(request, response);
 	                // Add more cases as needed
 	                default:
 	                    response.sendRedirect("index.jsp");
 	                    break;
 	            }
-	        } catch (SQLException | ParseException e) {
+	        } catch (SQLException e) {
 	            throw new ServletException(e);
-	        }
+	        } catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    }
+	 
+	 private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 	String id = request.getParameter("hidden_id");
+			ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
+		    request.setAttribute("programs", programs);
+		    request.getRequestDispatcher("/ShowReservations.jsp").forward(request, response);
+		}
 	 
 	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
 		        throws SQLException, IOException, ParseException, ServletException {
@@ -81,11 +81,15 @@ public class StudentServlet extends HttpServlet {
 		    String reservationId = request.getParameter("id");
 		    
 		    // Retrieve Student and Professor objects from DAOs
-		    Student student = studentDao.getStudent(studentId);
-		    Professor professor = professorDao.getProfessor(professorId);
+		    Student student = studentDao.getStudentByID(studentId);
+		    Professor professor = professorDao.getProfessorByID(professorId);
 		    
 		    // Check if student is null before using it
 		    if (student == null) {
+		        throw new ServletException("Student with ID " + studentId + " not found");
+		    }
+		    
+		    if (professor == null) {
 		        throw new ServletException("Student with ID " + studentId + " not found");
 		    }
 		    
@@ -97,7 +101,7 @@ public class StudentServlet extends HttpServlet {
 		    
 		    response.sendRedirect("student_main.jsp");
 		}
-
+	 
 	 private void insertStudent(HttpServletRequest request, HttpServletResponse response) 
 				throws SQLException, IOException, ServletException {
 			String username = request.getParameter("username");
@@ -114,10 +118,4 @@ public class StudentServlet extends HttpServlet {
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		    dispatcher.forward(request, response);
 		}
-	 private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    	String id;
-		ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
-		request.setAttribute("programs", programs);
-		request.getRequestDispatcher("/ShowReservations.jsp").forward(request, response);
-	}
 }
