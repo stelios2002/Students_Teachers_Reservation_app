@@ -17,12 +17,11 @@ public class UserDao {
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "L1ok3y20";
 
-	private static final String INSERT_USER_SQL = "INSERT INTO user" 
-	+ "  (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?); ";
+	private static final String INSERT_USER_SQL = "INSERT INTO user (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?); ";
 	
 	private static final String LOGIN_VALIDATION_PASSWORD_SQL = "SELECT role FROM user WHERE username = ? AND password = ?;";
-	    
     private static final String LOGIN_VALIDATION_USERNAME_SQL = "SELECT role FROM user WHERE username = ? ;";
+    private static final String DELETE_USER_SQL = "DELETE FROM user WHERE username = ?;";
 
 	protected Connection getConnection() {
         Connection connection = null;
@@ -61,16 +60,37 @@ public class UserDao {
 		return null;
 	}
 
-	public void deleteUser(String username) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void deleteUser(String id) {
+		try (Connection connection = getConnection();
+        		PreparedStatement usernamePreparedStatement = connection.prepareStatement(LOGIN_VALIDATION_USERNAME_SQL);
+				PreparedStatement deleteStatement = connection.prepareStatement(DELETE_USER_SQL)) {
+	            
+	        	usernamePreparedStatement.setString(1, id);
+	        	ResultSet resultSet = usernamePreparedStatement.executeQuery();
+	        	int role = 0;
+	            if (resultSet.next()) {
+	               role = resultSet.getInt("role");
+	            }
+	            if (role == 2) {
+	            	StudentDao studentDao = new StudentDao();
+	            	studentDao.deleteStudent(id);
+	            }
+	            else if (role == 3) {
+	            	ProfessorDao professorDao = new ProfessorDao();
+	            	professorDao.deleteProfessor(id);
+	            }
+	            deleteStatement.execute();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        
+	    }
 
 	public int getRole(String username, String password) throws ServletException, IOException {
 
     	try (Connection connection = getConnection();
-             PreparedStatement passwordPreparedStatement = connection.prepareStatement(LOGIN_VALIDATION_PASSWORD_SQL);
-        		PreparedStatement usernamePreparedStatement = connection.prepareStatement(LOGIN_VALIDATION_USERNAME_SQL)) {
+    			PreparedStatement usernamePreparedStatement = connection.prepareStatement(LOGIN_VALIDATION_USERNAME_SQL);
+    			PreparedStatement passwordPreparedStatement = connection.prepareStatement(LOGIN_VALIDATION_PASSWORD_SQL)) {
              
         	int role = -1;
         	

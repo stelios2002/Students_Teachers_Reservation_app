@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ReservationModule.users.models.Professor;
+import ReservationModule.utils.dao.ReservationDao;
 
 public class ProfessorDao {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
@@ -16,7 +17,9 @@ public class ProfessorDao {
 	private static final String INSERT_USER_SQL = "INSERT INTO user (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?)";
 	private static final String INSERT_PROFESSOR_SQL = "INSERT INTO professor (username, department, school, specialty, id) VALUES (?, ?, ?, ?, ?)";
 	private static final String LOGIN_USER_SQL = "SELECT * FROM user WHERE username = ?;";
-	private static final String LOGIN_PROFESSOR_SQL = "SELECT * FROM student WHERE username = ?;";
+	private static final String LOGIN_PROFESSOR_SQL = "SELECT * FROM professor WHERE username = ?;";
+	private static final String ID_PROFESSOR_SQL = "SELECT * FROM professor WHERE id = ?;";
+    private static final String DELETE_PROFESSOR_SQL = "DELETE FROM professor WHERE id = ?;";
 
 	protected Connection getConnection() {
         Connection connection = null;
@@ -59,7 +62,7 @@ public class ProfessorDao {
 		}
 	}
 
-	public Professor setProfessor(String username) {
+	public Professor getProfessor(String username) {
 		try (Connection connection = getConnection();
 		         PreparedStatement userStatement = connection.prepareStatement(LOGIN_USER_SQL);
 		         PreparedStatement professorStatement = connection.prepareStatement(LOGIN_PROFESSOR_SQL)) {
@@ -102,9 +105,47 @@ public class ProfessorDao {
 		        return null;
 		    }
 	}
+	
+	public Professor getProfessorByID(String id) throws SQLException {
+		try (Connection connection = getConnection();
+		         PreparedStatement userStatement = connection.prepareStatement(LOGIN_USER_SQL);
+		         PreparedStatement professorStatement = connection.prepareStatement(ID_PROFESSOR_SQL)) {
+		    professorStatement.setString(1, id);
+		    try (ResultSet rsp = professorStatement.executeQuery()){
+		    	if (rsp.next()) {
+		    		userStatement.setString(1, rsp.getString("username"));
+		    		try (ResultSet rsu = userStatement.executeQuery()){
+		    			if (rsu.next()) {
+		                    String uname = rsu.getString("username");
+		                    String password = rsu.getString("password");
+		                    String name = rsu.getString("first_name");
+		                    String surname = rsu.getString("surname");
+		                    int role = rsu.getInt("role");
+		                    String dept = rsp.getString("department");
+		                    String school = rsp.getString("school");
+		                    String specialty = rsp.getString("specialty");
+		                    return new Professor(uname, password, name, surname, role, dept, school, specialty, id);
+		    			} else {
+		    				System.out.println("No professor found with the provided username.");
+	                        return null;
+		    			}
+		    		}
+                } else {
+                    // Handle case where no results are found in professor query
+                    System.out.println("No professor found with the provided username.");
+                    return null;
+                }
+		    }
+		}
+	}
 
-	public Professor getProfessor(String parameter) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteProfessor(String id) throws SQLException {
+		try (Connection connection = getConnection();
+        		PreparedStatement deletePreparedStatement = connection.prepareStatement(DELETE_PROFESSOR_SQL)) {
+			ReservationDao reservationDao = new ReservationDao();
+			reservationDao.deleteReservationsOfProfessor(id);
+			deletePreparedStatement.setString(1, id);
+			deletePreparedStatement.execute();
+		}
 	}
 }
