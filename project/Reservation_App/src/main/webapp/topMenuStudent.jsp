@@ -1,14 +1,31 @@
 <div id="top-menu">
     <ul>
-        <li><a href="index.jsp">Make reservation</a></li>
-        <li><a href="ChooseRole.jsp">Cancel reservation</a></li>
-        <li><a href="ChooseRole.jsp">Change reservation</a></li>
-        <li><a href="ChooseRole.jsp">Logout</a></li>
+        
+        <li>
+            <form id="top" action="StudentMain.jsp" method="get">
+                <input class="top" type="submit" value="Main Page">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+                <input class="top" type="submit" name="action" value="Make a Reservation">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+                <input class="top" type="submit" value="Reservations">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/UserServlet" method="post">
+                <input class="top" type="submit" name="action" value="Logout">
+            </form>
+        </li>
         
     </ul>
 </div>
 <style>
-    body {
+   body {
         margin: 0;
         padding: 0;
     }
@@ -31,18 +48,35 @@
     #top-menu li {
         float: left;
     }
-    #top-menu li a {
+    #top-menu li input {
         display: block;
         color: white;
         text-align: center;
         padding: 14px 16px;
         text-decoration: none;
+        background-color:#333;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
     }
-    #top-menu li a:hover {
+    #top-menu li input:hover {
         background-color: #111;
     }
     .content {
         padding-top: 5px; /* Adds space to account for the fixed menu */
-        display: inline-block;
+    }
+    #top {
+	    background-color:#333;
+	    display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
+    
     }
 </style>

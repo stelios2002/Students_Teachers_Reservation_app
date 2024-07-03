@@ -1,9 +1,30 @@
 <div id="top-menu">
     <ul>
-        <li><a href="index.jsp">Pending Registrations</a></li>
-        <li><a href="ChooseRole.jsp">Edit Users</a></li>
-        <li><a href="ChooseRole.jsp">Delete Users</a></li>
-        <li><a href="ChooseRole.jsp">Logout</a></li>
+         <li>
+            <form id="top" action="AdminMain.jsp" method="get">
+                <input class="top" type="submit" value="Main Page">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/AdminServlet" method="post">
+                <input class="top" type="submit" name="action" value="Pending Registrations">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/AdminServlet" method="post">
+                <input class="top" type="submit" value="Students">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/AdminServlet" method="post">
+                <input class="top" type="submit" name="action" value="Professors">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/UserServlet" method="post">
+                <input class="top" type="submit" name="action" value="Logout">
+            </form>
+        </li>
         
     </ul>
 </div>

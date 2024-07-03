@@ -1,7 +1,7 @@
 <div id="top-menu">
     <ul>
-        <li><a href="index.jsp">Home</a></li>
-        <li><a href="ChooseRole.jsp">Login / Registration</a></li>
+        <li><form id="top" action="index.jsp" method="get"><input class="top" type="submit" value="Home"></form></li>
+        <li><form id="top" action="ChooseRole.jsp" method="get"><input class="top" type="submit" value="Login / Registration"></form></li>
     </ul>
 </div>
 <style>
@@ -28,18 +28,35 @@
     #top-menu li {
         float: left;
     }
-    #top-menu li a {
+    #top-menu li input {
         display: block;
         color: white;
         text-align: center;
         padding: 14px 16px;
         text-decoration: none;
+        background-color:#333;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
     }
-    #top-menu li a:hover {
+    #top-menu li input:hover {
         background-color: #111;
     }
     .content {
         padding-top: 5px; /* Adds space to account for the fixed menu */
-        display: inline-block;
+    }
+    #top {
+	    background-color:#333;
+	    display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
+    
     }
 </style>
