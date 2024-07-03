@@ -13,7 +13,7 @@
         </li>
         <li>
             <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
-                <input class="top" type="submit" value="Reservations">
+                <input class="top" type="submit"  name = "action" value="Reservations">
             </form>
         </li>
         <li>
