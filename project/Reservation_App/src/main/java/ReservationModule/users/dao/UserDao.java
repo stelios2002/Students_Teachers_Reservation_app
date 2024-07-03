@@ -1,11 +1,14 @@
 package ReservationModule.users.dao;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import javax.servlet.ServletException;
 
 import ReservationModule.users.models.User;
 
@@ -17,8 +20,9 @@ public class UserDao {
 	private static final String INSERT_USER_SQL = "INSERT INTO user" 
 	+ "  (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?); ";
 	
-	private static final String LOGIN_VALIDATION_SQL = "SELECT role FROM user " 
-	+ "WHERE username = ? AND password = ?;";
+	private static final String LOGIN_VALIDATION_PASSWORD_SQL = "SELECT role FROM user WHERE username = ? AND password = ?;";
+	    
+    private static final String LOGIN_VALIDATION_USERNAME_SQL = "SELECT role FROM user WHERE username = ? ;";
 
 	protected Connection getConnection() {
         Connection connection = null;
@@ -62,27 +66,33 @@ public class UserDao {
 		
 	}
 
-	public int getRole(String username, String password) {
-		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(LOGIN_VALIDATION_SQL)) {
-			System.out.println(LOGIN_VALIDATION_SQL);
-			preparedStatement.setString(1, username);
-			preparedStatement.setString(2, password);
-			System.out.println(preparedStatement);
-			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                // Move the cursor to the first row
-                if (resultSet.next()) {
-                    return resultSet.getInt("role");
-                } else {
-                    // Handle case where no results are found
-                    System.out.println("No user found with the provided username and password.");
-            		return 0;
-                }
+	public int getRole(String username, String password) throws ServletException, IOException {
+
+    	try (Connection connection = getConnection();
+             PreparedStatement passwordPreparedStatement = connection.prepareStatement(LOGIN_VALIDATION_PASSWORD_SQL);
+        		PreparedStatement usernamePreparedStatement = connection.prepareStatement(LOGIN_VALIDATION_USERNAME_SQL)) {
+             
+        	int role = -1;
+        	
+        	passwordPreparedStatement.setString(1, username);
+        	passwordPreparedStatement.setString(2, password);
+            
+        	usernamePreparedStatement.setString(1, username);
+        	ResultSet resultSet2 = usernamePreparedStatement.executeQuery();
+        	if (resultSet2.next()) {
+                role= 0;
             }
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
-		}
-		
-	}
+        	
+            ResultSet resultSet = passwordPreparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+               role = resultSet.getInt("role");
+            }
+            return role;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -2;
+        }
+        
+    }
 }
