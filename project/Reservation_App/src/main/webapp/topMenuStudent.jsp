@@ -8,6 +8,7 @@
         </li>
         <li>
             <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+            	 <input type="hidden" name="action" value="showReservationForm">
                 <input class="top" type="submit" name="action" value="Make a Reservation">
             </form>
         </li>
