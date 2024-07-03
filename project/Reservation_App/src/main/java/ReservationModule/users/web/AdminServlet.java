@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import ReservationModule.users.dao.AdminDao;
 import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.users.dao.StudentDao;
+import ReservationModule.users.dao.UserDao;
 import ReservationModule.users.models.Admin;
 import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
@@ -26,6 +27,7 @@ public class AdminServlet extends HttpServlet {
 	private StudentDao studentDao = new StudentDao();
 	private ProfessorDao professorDao = new ProfessorDao();
 	private ReservationDao reservationDao = new ReservationDao();
+	private UserDao userDao = new UserDao();
 	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -52,7 +54,7 @@ public class AdminServlet extends HttpServlet {
 				insertProfessor(request, response);
 				break;
 			case "/delete_user":
-				//deleteUser(request, response);
+				deleteUser(request, response);
 				break;
 			case "/delete_reservation":
 				deleteReservation(request, response);
@@ -118,12 +120,13 @@ public class AdminServlet extends HttpServlet {
 	    dispatcher.forward(request, response);
 	}
 
-//	private void deleteUser(HttpServletRequest request, HttpServletResponse response) 
-//			throws SQLException, IOException {
-//		String username = request.getParameter("username");
-//		//UserDao.deleteUser(username);
-//		response.sendRedirect("list");
-//	}
+	private void deleteUser(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException, ServletException {
+		String username = request.getParameter("username");
+		userDao.deleteUser(username);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("AdminMain.jsp");
+	    dispatcher.forward(request, response);
+	}
 	
 	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException, ServletException {
 		ArrayList<Reservation> programs = reservationDao.getReservations();

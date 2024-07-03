@@ -23,9 +23,14 @@ public class ReservationDao {
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "L1ok3y20";
 
+	private static final String ACCEPT_RESERVATIONS_SQL = "UPDATE reservations SET accepted = 1 WHERE id = ?;";
 	private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservations" 
-	+ "  (studid, profid, date, time, room, id) VALUES (?, ?, ?, ?, ?, ?); ";
+	+ "  (studid, profid, date, time, room, id, accepted) VALUES (?, ?, ?, ?, ?, ?, ?); ";
 	private static final String GET_RESERVATIONS_SQL = "SELECT * FROM reservations;";
+	private static final String GET_UNACCEPTED_SQL = "SELECT * FROM reservations where profid = ? AND accepted = 0;";
+	private static final String GET_RESERVATIONS_OF_PROFESSOR_SQL = "SELECT * FROM reservations where profid = ?;";
+	private static final String GET_RESERVATIONS_OF_STUDENT_SQL = "SELECT * FROM reservations where studid = ?;";
+    private static final String DELETE_RESERVATIONS_SQL = "DELETE FROM reservation WHERE id = ?;";
 
 	protected Connection getConnection() {
         Connection connection = null;
@@ -63,6 +68,7 @@ public class ReservationDao {
 			preparedStatement.setTime(4, time);
 			preparedStatement.setInt(5, reservation.getRoom());
 			preparedStatement.setString(6, reservation.getId());
+			preparedStatement.setInt(7, 0);
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -103,5 +109,126 @@ public class ReservationDao {
 			System.out.println(e.getStackTrace());
 		}
 		return reservations;
+	}
+
+	public ArrayList<Reservation> getReservationsOfProfessor(String id) {
+		System.out.println(GET_RESERVATIONS_OF_PROFESSOR_SQL);
+		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+		// try-with-resource statement will auto close the connection.
+		try (Connection connection = getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(GET_RESERVATIONS_OF_PROFESSOR_SQL);) {
+			preparedStatement.setString(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				String sid = resultSet.getString("studid");
+				String pid = resultSet.getString("profid");
+				java.sql.Date sqlDate = resultSet.getDate("date");
+				LocalDate date = sqlDate.toLocalDate();
+				LocalTime time = resultSet.getTime("time").toLocalTime();
+				int room = resultSet.getInt("room");
+				String rid = resultSet.getString("id");
+				StudentDao studentDao = new StudentDao();
+				ProfessorDao professorDao = new ProfessorDao();
+				Student s1 = studentDao.getStudent(sid);
+				Professor p1 = professorDao.getProfessor(pid);
+				Reservation r1 = new Reservation(s1, p1, date, time, room, rid);
+				reservations.add(r1);
+			}
+			System.out.println(preparedStatement);
+		} catch (SQLException e) {
+			System.out.println(e.getStackTrace());
+		}
+		return reservations;
+	}
+	
+	public ArrayList<Reservation> getReservationsOfStudent(String id) {
+		System.out.println(GET_RESERVATIONS_OF_STUDENT_SQL);
+		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+		// try-with-resource statement will auto close the connection.
+		try (Connection connection = getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(GET_RESERVATIONS_OF_STUDENT_SQL);) {
+			preparedStatement.setString(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				String sid = resultSet.getString("studid");
+				String pid = resultSet.getString("profid");
+				java.sql.Date sqlDate = resultSet.getDate("date");
+				LocalDate date = sqlDate.toLocalDate();
+				LocalTime time = resultSet.getTime("time").toLocalTime();
+				int room = resultSet.getInt("room");
+				String rid = resultSet.getString("id");
+				StudentDao studentDao = new StudentDao();
+				ProfessorDao professorDao = new ProfessorDao();
+				Student s1 = studentDao.getStudentByID(sid);
+				Professor p1 = professorDao.getProfessorByID(pid);
+				Reservation r1 = new Reservation(s1, p1, date, time, room, rid);
+				reservations.add(r1);
+			}
+			System.out.println(preparedStatement);
+		} catch (SQLException e) {
+			System.out.println(e.getStackTrace());
+		}
+		return reservations;
+	}
+
+	public void deleteReservationsOfStudent(String id) throws SQLException {
+		ArrayList<Reservation> reservations = getReservationsOfStudent(id);
+		for (int i = 0; i<reservations.size(); i++) {
+			try (Connection connection = getConnection();
+	        		PreparedStatement idPreparedStatement = connection.prepareStatement(DELETE_RESERVATIONS_SQL)) {
+				idPreparedStatement.setString(1, reservations.get(i).getId());
+				idPreparedStatement.execute();
+			}
+		}
+	}
+	
+	public void deleteReservationsOfProfessor(String id) throws SQLException {
+		ArrayList<Reservation> reservations = getReservationsOfProfessor(id);
+		for (int i = 0; i<reservations.size(); i++) {
+			try (Connection connection = getConnection();
+	        		PreparedStatement idPreparedStatement = connection.prepareStatement(DELETE_RESERVATIONS_SQL)) {
+				idPreparedStatement.setString(1, reservations.get(i).getId());
+				idPreparedStatement.execute();
+			}
+		}
+	}
+
+	public ArrayList<Reservation> getUnacceptedReservations(String id) {
+		System.out.println(GET_UNACCEPTED_SQL);
+		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+		// try-with-resource statement will auto close the connection.
+		try (Connection connection = getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(GET_UNACCEPTED_SQL);) {
+			preparedStatement.setString(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				String sid = resultSet.getString("studid");
+				String pid = resultSet.getString("profid");
+				java.sql.Date sqlDate = resultSet.getDate("date");
+				LocalDate date = sqlDate.toLocalDate();
+				LocalTime time = resultSet.getTime("time").toLocalTime();
+				int room = resultSet.getInt("room");
+				String rid = resultSet.getString("id");
+				StudentDao studentDao = new StudentDao();
+				ProfessorDao professorDao = new ProfessorDao();
+				Student s1 = studentDao.getStudent(sid);
+				Professor p1 = professorDao.getProfessor(pid);
+				Reservation r1 = new Reservation(s1, p1, date, time, room, rid);
+				reservations.add(r1);
+			}
+			System.out.println(preparedStatement);
+		} catch (SQLException e) {
+			System.out.println(e.getStackTrace());
+		}
+		return reservations;
+	}
+
+	public void acceptReservation(String id) throws SQLException {
+		try (Connection connection = getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(ACCEPT_RESERVATIONS_SQL)){
+			preparedStatement.setString(1, id);
+			preparedStatement.execute();
+		}
 	}
 }

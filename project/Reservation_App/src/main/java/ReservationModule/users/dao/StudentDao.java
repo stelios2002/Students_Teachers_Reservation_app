@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
 import ReservationModule.utils.dao.ReservationDao;
 

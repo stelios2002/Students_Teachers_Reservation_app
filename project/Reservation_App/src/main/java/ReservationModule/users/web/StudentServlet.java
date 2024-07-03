@@ -46,9 +46,9 @@ public class StudentServlet extends HttpServlet {
 	                	System.out.println("Register action called");
 		                insertStudent(request, response);
 		                break;
-	                case "show_reservations":
+	                case "Reservations":
 	                	showReservations(request, response);
-	                case "commit_reservations":
+	                case "commitReservation":
 	                	commitReservation(request, response);
 	                // Add more cases as needed
 	                default:
@@ -67,7 +67,7 @@ public class StudentServlet extends HttpServlet {
 		 	String id = request.getParameter("hidden_id");
 			ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
 		    request.setAttribute("programs", programs);
-		    request.getRequestDispatcher("/ShowReservations.jsp").forward(request, response);
+		    request.getRequestDispatcher("StudentReservations.jsp").forward(request, response);
 		}
 	 
 	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
@@ -99,7 +99,7 @@ public class StudentServlet extends HttpServlet {
 		    // Insert Reservation into database
 		    reservationDao.insertReservation(reservation);
 		    
-		    response.sendRedirect("student_main.jsp");
+		    response.sendRedirect("StudentMain.jsp");
 		}
 	 
 	 private void insertStudent(HttpServletRequest request, HttpServletResponse response) 

@@ -2,12 +2,6 @@ package ReservationModule.users.web;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -19,59 +13,66 @@ import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.models.Professor;
-import ReservationModule.users.dao.StudentDao;
 
 
 public class ProfessorServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ProfessorDao professorDao;
     private ReservationDao reservationDao;
-    private StudentDao studentDao;
 
     public void init() {
         professorDao = new ProfessorDao();
         reservationDao = new ReservationDao();
-        studentDao = new StudentDao();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        try {
-            switch (action) {
-                case "registerProfessor":
-                    insertProfessor(request, response);
-                    break;
-                case "acceptReservation":
-                    acceptReservation(request, response);
-                    break;
-                case "showReservations":
-                	showReservations(request, response);
-                default:
-                    response.sendRedirect("index.jsp");
-                    break;
-            }
-        } catch (SQLException e) {
-            throw new ServletException(e);
-        }
+        doGet(request, response);
     }
 
-    private void acceptReservation(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		
-	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+			String action = request.getParameter("action");
+            try {
+                switch (action) {
+                    case "registerProfessor":
+                        insertProfessor(request, response);
+                        break;
+                    case "acceptReservation":
+                        acceptReservation(request, response);
+                        break;
+                    case "Reservations":
+                    	showReservations(request, response);
+                    case "Confirm Reservations":
+                    	showUnacceptedReservations(request, response);
+                    default:
+                        response.sendRedirect("index.jsp");
+                        break;
+                }
+            } catch (SQLException e) {
+                throw new ServletException(e);
+            }
+    }
 
+    private void acceptReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String id = request.getParameter("reservation_id");
+		reservationDao.acceptReservation(id);
+		showUnacceptedReservations(request, response);		
+	}
+    
+    private void showUnacceptedReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id = request.getParameter("hidden_id");
+		ArrayList<Reservation> programs = reservationDao.getUnacceptedReservations(id);
+	    request.setAttribute("programs", programs);
+	    request.getRequestDispatcher("ShowReservations.jsp").forward(request, response);
+	}
+    
 	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("hidden_id");
 		ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
 	    request.setAttribute("programs", programs);
-	    request.getRequestDispatcher("/ShowReservations.jsp").forward(request, response);
+	    request.getRequestDispatcher("ShowReservations.jsp").forward(request, response);
 	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Define GET request handling if needed
-    }
 
     private void insertProfessor(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
