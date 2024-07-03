@@ -114,9 +114,10 @@ public class StudentServlet extends HttpServlet {
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		    dispatcher.forward(request, response);
 		}
-	 private void showReservationForm(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("Reservation.jsp");
-	        dispatcher.forward(request, response);
-	    }
+	 private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    	String id;
+		ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
+		request.setAttribute("programs", programs);
+		request.getRequestDispatcher("/ShowReservations.jsp").forward(request, response);
+	}
 }
