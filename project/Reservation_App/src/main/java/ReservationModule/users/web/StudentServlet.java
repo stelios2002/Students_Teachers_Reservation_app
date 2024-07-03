@@ -58,7 +58,7 @@ public class StudentServlet extends HttpServlet {
 	                    commitReservation(request, response);
 	                    break;
 	                case "showReservationForm":
-	                    showReservationForm(request, response);
+	                    showReservations(request, response);
 	                    break;
 	                // Add more cases as needed
 	                default:
