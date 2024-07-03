@@ -54,31 +54,50 @@ public class StudentServlet extends HttpServlet {
 	                	System.out.println("Register action called");
 		                insertStudent(request, response);
 		                break;
+	                case "commitReservation":
+	                    commitReservation(request, response);
+	                    break;
+	                case "showReservationForm":
+	                    showReservationForm(request, response);
+	                    break;
 	                // Add more cases as needed
 	                default:
 	                    response.sendRedirect("index.jsp");
 	                    break;
 	            }
-	        } catch (SQLException e) {
+	        } catch (SQLException | ParseException e) {
 	            throw new ServletException(e);
 	        }
 	    }
 	 
 	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
-		        throws SQLException, IOException, ParseException {
-		    Student student = studentDao.getStudent(request.getParameter("student_id"));
-		    Professor professor = professorDao.getProfessor(request.getParameter("professor_id"));
-		    SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
-		    java.util.Date date = isoFormat.parse(request.getParameter("date"));
-		    LocalDate myDate = convertToLocalDateViaMilisecond(date);
+		        throws SQLException, IOException, ParseException, ServletException {
+		    // Retrieve parameters and parse them
+		    String studentId = request.getParameter("student_id");
+		    String professorId = request.getParameter("professor_id");
+		    LocalDate date = LocalDate.parse(request.getParameter("date"));
 		    LocalTime time = LocalTime.parse(request.getParameter("time"));
 		    int room = Integer.parseInt(request.getParameter("room"));
-		    String id = request.getParameter("id");
-		    Reservation reservation = new Reservation(student, professor, myDate, time, room, id);
+		    String reservationId = request.getParameter("id");
+		    
+		    // Retrieve Student and Professor objects from DAOs
+		    Student student = studentDao.getStudent(studentId);
+		    Professor professor = professorDao.getProfessor(professorId);
+		    
+		    // Check if student is null before using it
+		    if (student == null) {
+		        throw new ServletException("Student with ID " + studentId + " not found");
+		    }
+		    
+		    // Create Reservation object
+		    Reservation reservation = new Reservation(student, professor, date, time, room, reservationId);
+		    
+		    // Insert Reservation into database
 		    reservationDao.insertReservation(reservation);
+		    
 		    response.sendRedirect("student_main.jsp");
 		}
-	 
+
 	 private void insertStudent(HttpServletRequest request, HttpServletResponse response) 
 				throws SQLException, IOException, ServletException {
 			String username = request.getParameter("username");
@@ -95,4 +114,9 @@ public class StudentServlet extends HttpServlet {
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		    dispatcher.forward(request, response);
 		}
+	 private void showReservationForm(HttpServletRequest request, HttpServletResponse response)
+	            throws ServletException, IOException {
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("Reservation.jsp");
+	        dispatcher.forward(request, response);
+	    }
 }
