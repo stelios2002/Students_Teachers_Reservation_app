@@ -44,8 +44,10 @@ public class ProfessorServlet extends HttpServlet {
                         break;
                     case "Reservations":
                     	showReservations(request, response);
+                    	break;
                     case "Confirm Reservations":
                     	showUnacceptedReservations(request, response);
+                    	break;
                     default:
                         response.sendRedirect("index.jsp");
                         break;
@@ -63,15 +65,15 @@ public class ProfessorServlet extends HttpServlet {
     
     private void showUnacceptedReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("hidden_id");
-		ArrayList<Reservation> programs = reservationDao.getUnacceptedReservations(id);
-	    request.setAttribute("programs", programs);
+		ArrayList<Reservation> reservations = reservationDao.getUnacceptedReservations(id);
+	    request.setAttribute("reservations", reservations);
 	    request.getRequestDispatcher("ShowReservations.jsp").forward(request, response);
 	}
     
 	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("hidden_id");
-		ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
-	    request.setAttribute("programs", programs);
+		ArrayList<Reservation> reservations = reservationDao.getReservationsOfProfessor(id);
+	    request.setAttribute("reservations", reservations);
 	    request.getRequestDispatcher("ShowReservations.jsp").forward(request, response);
 	}
 

@@ -22,7 +22,8 @@ public class UserServlet extends HttpServlet {
     }
 
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
        
@@ -37,7 +38,6 @@ public class UserServlet extends HttpServlet {
 			case "Logout":
 				logout(request, response);
 				break;	
-			
 			case "UserDelete":
 				deleteUser(request,response);
 				break;
@@ -90,7 +90,7 @@ public class UserServlet extends HttpServlet {
 	public void logout (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
-			session.invalidate(); // Invalidate the session
+			session.invalidate(); 
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		dispatcher.forward(request, response);
@@ -103,6 +103,4 @@ public class UserServlet extends HttpServlet {
 	    RequestDispatcher dispatcher = request.getRequestDispatcher("adminMain.jsp");
 	    dispatcher.forward(request, response);
 	}
-	
-	// Add more methods as needed
 }

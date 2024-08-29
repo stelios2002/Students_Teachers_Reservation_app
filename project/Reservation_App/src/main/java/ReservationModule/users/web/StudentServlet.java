@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.users.dao.StudentDao;
+import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
@@ -23,10 +25,12 @@ public class StudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private StudentDao studentDao;
 	private ReservationDao reservationDao;
+	private ProfessorDao professorDao;
 	
 	public void init() {
 		studentDao = new StudentDao();
         reservationDao = new ReservationDao();
+        professorDao = new ProfessorDao();
     }
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -45,9 +49,10 @@ public class StudentServlet extends HttpServlet {
 		                break;
 	                case "Reservations":
 	                	showReservations(request, response);
+	                	break;
 	                case "commitReservation":
 	                	commitReservation(request, response);
-	                // Add more cases as needed
+	                	break;
 	                default:
 	                    response.sendRedirect("index.jsp");
 	                    break;
@@ -62,14 +67,14 @@ public class StudentServlet extends HttpServlet {
 	 
 	 private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 	String id = request.getParameter("hidden_id");
-			ArrayList<Reservation> programs = reservationDao.getReservationsOfStudent(id);
-		    request.setAttribute("programs", programs);
+			ArrayList<Reservation> reservations = reservationDao.getReservationsOfStudent(id);
+		    request.setAttribute("reservations", reservations);
 		    request.getRequestDispatcher("StudentReservations.jsp").forward(request, response);
 		}
 	 
 	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
 		        throws SQLException, IOException, ParseException, ServletException {
-		    // Retrieve parameters and parse them
+		    
 		    String studentId = request.getParameter("student_id");
 		    String professorId = request.getParameter("professor_id");
 		    LocalDate date = LocalDate.parse(request.getParameter("date"));
@@ -77,10 +82,23 @@ public class StudentServlet extends HttpServlet {
 		    int room = Integer.parseInt(request.getParameter("room"));
 		    String reservationId = request.getParameter("id");
 		    
-		    // Create Reservation object
-		    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
+		  
+		    Student student = studentDao.getStudentByID(studentId);
+		    Professor professor = professorDao.getProfessorByID(professorId);
 		    
-		    // Insert Reservation into database
+		    
+		    if (student == null) {
+		        throw new ServletException("Student with ID " + studentId + " not found");
+		    }
+		    
+		    if (professor == null) {
+		        throw new ServletException("Student with ID " + studentId + " not found");
+		    }
+		    
+		
+		    Reservation reservation = new Reservation(student, professor, date, time, room, reservationId);
+		    
+		    
 		    reservationDao.insertReservation(reservation);
 		    
 		    response.sendRedirect("StudentMain.jsp");
