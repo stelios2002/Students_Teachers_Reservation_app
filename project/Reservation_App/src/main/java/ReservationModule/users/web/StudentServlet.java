@@ -5,13 +5,14 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.StudentDao;
 import ReservationModule.users.models.Student;
@@ -43,12 +44,12 @@ public class StudentServlet extends HttpServlet {
 	                	System.out.println("Register action called");
 		                insertStudent(request, response);
 		                break;
-	                case "Reservations":
+	                case "Main Page":
 	                	showReservations(request, response);
-	                	break;
+	                    break;
 	                case "commitReservation":
 	                	commitReservation(request, response);
-	                	break;
+	                    break;
 	                // Add more cases as needed
 	                default:
 	                    response.sendRedirect("index.jsp");
@@ -63,10 +64,13 @@ public class StudentServlet extends HttpServlet {
 	    }
 	 
 	 private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 	String id = request.getParameter("hidden_id");
-			ArrayList<Reservation> reservations = reservationDao.getReservationsOfStudent(id);
-		    request.setAttribute("reservations", reservations);
-		    request.getRequestDispatcher("StudentReservations.jsp").forward(request, response);
+		 ReservationDao reservationDao = new ReservationDao();
+			StudentDao studentDao = new StudentDao();
+			HttpSession session = request.getSession();
+			List<Reservation> reservations = reservationDao.getReservationsOfStudent(studentDao.getStudent((String) session.getAttribute("username")).getId());
+			request.setAttribute("reservations", reservations);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("StudentMain.jsp");
+			dispatcher.forward(request, response);
 		}
 	 
 	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
