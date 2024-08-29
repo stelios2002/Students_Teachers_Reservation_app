@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.users.dao.StudentDao;
-import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
@@ -25,12 +23,10 @@ public class StudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private StudentDao studentDao;
 	private ReservationDao reservationDao;
-	private ProfessorDao professorDao;
 	
 	public void init() {
 		studentDao = new StudentDao();
         reservationDao = new ReservationDao();
-        professorDao = new ProfessorDao();
     }
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -81,21 +77,8 @@ public class StudentServlet extends HttpServlet {
 		    int room = Integer.parseInt(request.getParameter("room"));
 		    String reservationId = request.getParameter("id");
 		    
-		    // Retrieve Student and Professor objects from DAOs
-		    Student student = studentDao.getStudentByID(studentId);
-		    Professor professor = professorDao.getProfessorByID(professorId);
-		    
-		    // Check if student is null before using it
-		    if (student == null) {
-		        throw new ServletException("Student with ID " + studentId + " not found");
-		    }
-		    
-		    if (professor == null) {
-		        throw new ServletException("Student with ID " + studentId + " not found");
-		    }
-		    
 		    // Create Reservation object
-		    Reservation reservation = new Reservation(student, professor, date, time, room, reservationId);
+		    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
 		    
 		    // Insert Reservation into database
 		    reservationDao.insertReservation(reservation);
