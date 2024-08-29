@@ -67,8 +67,10 @@ public class StudentServlet extends HttpServlet {
 		 ReservationDao reservationDao = new ReservationDao();
 			StudentDao studentDao = new StudentDao();
 			HttpSession session = request.getSession();
-			List<Reservation> reservations = reservationDao.getReservationsOfStudent(studentDao.getStudent((String) session.getAttribute("username")).getId());
-			request.setAttribute("reservations", reservations);
+			if((String) session.getAttribute("username") != null) {
+				List<Reservation> reservations = reservationDao.getReservationsOfStudent(studentDao.getStudent((String) session.getAttribute("username")).getId());
+				request.setAttribute("reservations", reservations);
+			}
 			RequestDispatcher dispatcher = request.getRequestDispatcher("StudentMain.jsp");
 			dispatcher.forward(request, response);
 		}
