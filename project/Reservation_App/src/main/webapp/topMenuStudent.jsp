@@ -2,8 +2,8 @@
     <ul>
         
         <li>
-            <form id="top" action="StudentMain.jsp" method="get">
-                <input class="top" type="submit" value="Main Page">
+            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+                <input class="top" type="submit" name="action" value="Main Page">
             </form>
         </li>
         <li>
