@@ -89,7 +89,7 @@ public class StudentServlet extends HttpServlet {
 		    // Insert Reservation into database
 		    reservationDao.insertReservation(reservation);
 		    
-		    response.sendRedirect("StudentMain.jsp");
+		    showReservations(request, response);
 		}
 	 
 	 private void insertStudent(HttpServletRequest request, HttpServletResponse response) 
