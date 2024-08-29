@@ -19,7 +19,7 @@
         if (username != null) {
     %>
     <div class="content">
-        <h1>Call History for <%= username %></h1>
+        <h1>Reservations of <%= username %></h1>
         <table>
             <tr>
                 <th>Professor ID</th>
@@ -57,7 +57,7 @@
                 } else {
             %>
             <tr>
-                <td colspan="5">No Reservations found.</td>
+                <td colspan="5">No reservations found.</td>
             </tr>
             <%
                 }
