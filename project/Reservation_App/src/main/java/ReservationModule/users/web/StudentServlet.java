@@ -45,8 +45,10 @@ public class StudentServlet extends HttpServlet {
 		                break;
 	                case "Reservations":
 	                	showReservations(request, response);
+	                	break;
 	                case "commitReservation":
 	                	commitReservation(request, response);
+	                	break;
 	                // Add more cases as needed
 	                default:
 	                    response.sendRedirect("index.jsp");
@@ -62,8 +64,8 @@ public class StudentServlet extends HttpServlet {
 	 
 	 private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 	String id = request.getParameter("hidden_id");
-			ArrayList<Reservation> programs = reservationDao.getReservationsOfStudent(id);
-		    request.setAttribute("programs", programs);
+			ArrayList<Reservation> reservations = reservationDao.getReservationsOfStudent(id);
+		    request.setAttribute("reservations", reservations);
 		    request.getRequestDispatcher("StudentReservations.jsp").forward(request, response);
 		}
 	 
