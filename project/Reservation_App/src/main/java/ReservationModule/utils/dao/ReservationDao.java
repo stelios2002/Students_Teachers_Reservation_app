@@ -12,10 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import ReservationModule.users.dao.ProfessorDao;
-import ReservationModule.users.dao.StudentDao;
-import ReservationModule.users.models.Professor;
-import ReservationModule.users.models.Student;
 import ReservationModule.utils.models.Reservation;
 
 public class ReservationDao {
@@ -58,8 +54,8 @@ public class ReservationDao {
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_RESERVATION_SQL)) {
-			preparedStatement.setString(1, reservation.getStudent().getId());
-			preparedStatement.setString(2, reservation.getProfessor().getId());
+			preparedStatement.setString(1, reservation.getStudent());
+			preparedStatement.setString(2, reservation.getProfessor());
 			SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");//uuuu-MM-dd
 			java.util.Date date = isoFormat.parse((reservation.getDate().toString()));
 			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -90,18 +86,18 @@ public class ReservationDao {
 			ResultSet resultSet = preparedStatement.executeQuery()) {
 			
 			while(resultSet.next()) {
-				String sid = resultSet.getString("studid");
-				String pid = resultSet.getString("profid");
+				String s1 = resultSet.getString("studid");
+				String p1 = resultSet.getString("profid");
 				java.sql.Date sqlDate = resultSet.getDate("date");
 				LocalDate date = sqlDate.toLocalDate();
 				LocalTime time = resultSet.getTime("time").toLocalTime();
 				int room = resultSet.getInt("room");
 				String id = resultSet.getString("id");
-				StudentDao studentDao = new StudentDao();
-				ProfessorDao professorDao = new ProfessorDao();
-				Student s1 = studentDao.getStudent(sid);
-				Professor p1 = professorDao.getProfessor(pid);
-				Reservation r1 = new Reservation(s1, p1, date, time, room, id);
+				boolean accepted = true;
+				if(resultSet.getInt("accepted") == 0) {
+					accepted = !accepted;
+				}
+				Reservation r1 = new Reservation(s1, p1, date, time, room, id, accepted);
 				reservations.add(r1);
 			}
 			System.out.println(preparedStatement);
@@ -120,18 +116,18 @@ public class ReservationDao {
 			preparedStatement.setString(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
-				String sid = resultSet.getString("studid");
-				String pid = resultSet.getString("profid");
+				String s1 = resultSet.getString("studid");
+				String p1 = resultSet.getString("profid");
 				java.sql.Date sqlDate = resultSet.getDate("date");
 				LocalDate date = sqlDate.toLocalDate();
 				LocalTime time = resultSet.getTime("time").toLocalTime();
 				int room = resultSet.getInt("room");
 				String rid = resultSet.getString("id");
-				StudentDao studentDao = new StudentDao();
-				ProfessorDao professorDao = new ProfessorDao();
-				Student s1 = studentDao.getStudent(sid);
-				Professor p1 = professorDao.getProfessor(pid);
-				Reservation r1 = new Reservation(s1, p1, date, time, room, rid);
+				boolean accepted = true;
+				if(resultSet.getInt("accepted") == 0) {
+					accepted = !accepted;
+				}
+				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
 				reservations.add(r1);
 			}
 			System.out.println(preparedStatement);
@@ -151,18 +147,21 @@ public class ReservationDao {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
-				String sid = resultSet.getString("studid");
-				String pid = resultSet.getString("profid");
+				String s1 = resultSet.getString("studid");
+				String p1 = resultSet.getString("profid");
 				java.sql.Date sqlDate = resultSet.getDate("date");
 				LocalDate date = sqlDate.toLocalDate();
 				LocalTime time = resultSet.getTime("time").toLocalTime();
 				int room = resultSet.getInt("room");
 				String rid = resultSet.getString("id");
-				StudentDao studentDao = new StudentDao();
-				ProfessorDao professorDao = new ProfessorDao();
-				Student s1 = studentDao.getStudentByID(sid);
-				Professor p1 = professorDao.getProfessorByID(pid);
-				Reservation r1 = new Reservation(s1, p1, date, time, room, rid);
+				boolean accepted = true;
+				if(resultSet.getInt("accepted") == 0) {
+					accepted = !accepted;
+				}
+				if(resultSet.getInt("accepted") == 0) {
+					accepted = !accepted;
+				}
+				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
 				reservations.add(r1);
 			}
 			System.out.println(preparedStatement);
@@ -203,18 +202,18 @@ public class ReservationDao {
 			preparedStatement.setString(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
-				String sid = resultSet.getString("studid");
-				String pid = resultSet.getString("profid");
+				String s1 = resultSet.getString("studid");
+				String p1 = resultSet.getString("profid");
 				java.sql.Date sqlDate = resultSet.getDate("date");
 				LocalDate date = sqlDate.toLocalDate();
 				LocalTime time = resultSet.getTime("time").toLocalTime();
 				int room = resultSet.getInt("room");
 				String rid = resultSet.getString("id");
-				StudentDao studentDao = new StudentDao();
-				ProfessorDao professorDao = new ProfessorDao();
-				Student s1 = studentDao.getStudent(sid);
-				Professor p1 = professorDao.getProfessor(pid);
-				Reservation r1 = new Reservation(s1, p1, date, time, room, rid);
+				boolean accepted = true;
+				if(resultSet.getInt("accepted") == 0) {
+					accepted = !accepted;
+				}
+				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
 				reservations.add(r1);
 			}
 			System.out.println(preparedStatement);
