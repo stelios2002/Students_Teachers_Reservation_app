@@ -3,7 +3,6 @@ package ReservationModule.users.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ReservationModule.users.models.Admin;
@@ -15,7 +14,6 @@ public class AdminDao {
 
 	private static final String INSERT_ADMIN_SQL = "INSERT INTO user" 
 	+ "  (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?); ";
-	private static final String LOGIN_USER_SQL = "SELECT * FROM user WHERE username = ?;";
 
 	protected Connection getConnection() {
         Connection connection = null;
@@ -47,33 +45,5 @@ public class AdminDao {
 		} catch (SQLException e) {
 			System.out.println(e.getStackTrace());
 		}
-	}
-
-	public Admin setAdmin(String username) {
-		try (Connection connection = getConnection();
-		         PreparedStatement userStatement = connection.prepareStatement(LOGIN_USER_SQL)) {
-		        
-		        userStatement.setString(1, username);
-		        System.out.println(userStatement);
-		        
-		        try (ResultSet rsu = userStatement.executeQuery()) {
-		            if (rsu.next()) {
-		                String uname = rsu.getString("username");
-		                String password = rsu.getString("password");
-		                String name = rsu.getString("first_name");
-		                String surname = rsu.getString("surname");
-		                int role = rsu.getInt("role");
-		                
-		                return new Admin(uname, password, name, surname, role);
-		            } else {
-		                // Handle case where no results are found
-		                System.out.println("No admin found with the provided username.");
-		                return null;
-		            }
-		        }
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		        return null;
-	    }
 	}
 }

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ReservationModule.users.dao.AdminDao;
+import ReservationModule.users.dao.Ipassword;
 import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.users.dao.StudentDao;
 import ReservationModule.users.dao.UserDao;
@@ -81,7 +82,8 @@ public class AdminServlet extends HttpServlet {
 		String surname = request.getParameter("name");
 		String password = request.getParameter("name");
 		int role = Integer.parseInt(request.getParameter("name"));
-		Admin newAdmin = new Admin(username, name, surname, password, role);
+	    String hashedPassword = Ipassword.hashPassword(password);
+		Admin newAdmin = new Admin(username, name, surname, hashedPassword, role);
 		adminDao.insertAdmin(newAdmin);
 		response.sendRedirect("list");
 	}

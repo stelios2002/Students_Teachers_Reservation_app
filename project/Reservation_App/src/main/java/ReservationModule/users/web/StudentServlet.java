@@ -19,6 +19,7 @@ import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
+import ReservationModule.users.dao.Ipassword;
 
 public class StudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -65,7 +66,7 @@ public class StudentServlet extends HttpServlet {
 	 
 	 private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 	String id = request.getParameter("hidden_id");
-			ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
+			ArrayList<Reservation> programs = reservationDao.getReservationsOfStudent(id);
 		    request.setAttribute("programs", programs);
 		    request.getRequestDispatcher("StudentReservations.jsp").forward(request, response);
 		}
@@ -113,7 +114,9 @@ public class StudentServlet extends HttpServlet {
 		    String school = request.getParameter("school");
 		    int year = Integer.parseInt(request.getParameter("year"));
 		    String id = request.getParameter("id");
-		    Student newStudent = new Student(username, password, name, surname, role, dept, school, year, id);
+		    String hashedPassword = Ipassword.hashPassword(password);
+		    System.out.println(hashedPassword);
+		    Student newStudent = new Student(username, hashedPassword, name, surname, role, dept, school, year, id);
 		    studentDao.insertStudent(newStudent);
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		    dispatcher.forward(request, response);

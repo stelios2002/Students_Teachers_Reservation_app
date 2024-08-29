@@ -13,6 +13,7 @@ import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.models.Professor;
+import ReservationModule.users.dao.Ipassword;
 
 
 public class ProfessorServlet extends HttpServlet {
@@ -85,7 +86,8 @@ public class ProfessorServlet extends HttpServlet {
         String school = request.getParameter("school");
         String speciality = request.getParameter("specialty");
         String id = request.getParameter("id");
-        Professor newProfessor = new Professor(username, password, name, surname, role, dept, school, speciality, id);
+	    String hashedPassword = Ipassword.hashPassword(password);
+        Professor newProfessor = new Professor(username, hashedPassword, name, surname, role, dept, school, speciality, id);
         professorDao.insertProfessor(newProfessor);
         response.sendRedirect("index.jsp");
     }

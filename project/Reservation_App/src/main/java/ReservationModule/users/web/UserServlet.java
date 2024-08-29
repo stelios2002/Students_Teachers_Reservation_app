@@ -10,22 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ReservationModule.users.dao.AdminDao;
-import ReservationModule.users.dao.ProfessorDao;
-import ReservationModule.users.dao.StudentDao;
 import ReservationModule.users.dao.UserDao;
+import ReservationModule.users.dao.Ipassword;
 
 public class UserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private StudentDao studentDao;
-    private ProfessorDao professorDao;
     private UserDao userDao;
-    private AdminDao adminDao;
     
     public void init() {
-        studentDao = new StudentDao();
-        adminDao = new AdminDao();
-        professorDao = new ProfessorDao();
         userDao = new UserDao();
     }
 
@@ -43,7 +35,7 @@ public class UserServlet extends HttpServlet {
 				login(request, response);
 				break;
 			case "Logout":
-				Logout(request, response);
+				logout(request, response);
 				break;	
 			
 			case "UserDelete":
@@ -61,18 +53,23 @@ public class UserServlet extends HttpServlet {
 	public void login (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String hashedPassword = Ipassword.hashPassword(password);
 		System.out.println("Attempting login for user: " + username);
-		int role = userDao.getRole(username,password);
+		int role = userDao.login(username,hashedPassword);
 		if (role == 2) {
-			studentDao.getStudent(username);
+			HttpSession session = request.getSession();
+			session.setAttribute("username", username);
+			System.out.println(session.getAttribute("username") + "tries to login");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("StudentMain.jsp");
 			dispatcher.forward(request, response);
 		} else if (role == 3) {
-			professorDao.getProfessor(username);
+			HttpSession session = request.getSession();
+			session.setAttribute("username", username);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("ProfessorMain.jsp");
 			dispatcher.forward(request, response);
 		} else if (role == 1) {
-			adminDao.setAdmin(username);
+			HttpSession session = request.getSession();
+			session.setAttribute("username", username);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("AdminMain.jsp");
 			dispatcher.forward(request, response);
 		} else if (role == -1){
@@ -90,8 +87,12 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 	
-	public void Logout (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("LogoutPage.jsp");
+	public void logout (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate(); // Invalidate the session
+		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		dispatcher.forward(request, response);
 	}
 	
