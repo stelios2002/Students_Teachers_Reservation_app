@@ -2,6 +2,7 @@ package ReservationModule.users.web;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.UserDao;
+import ReservationModule.utils.dao.ReservationDao;
+import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.dao.Ipassword;
+import ReservationModule.users.dao.StudentDao;
 
 public class UserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -22,8 +26,7 @@ public class UserServlet extends HttpServlet {
     }
 
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
        
@@ -38,6 +41,7 @@ public class UserServlet extends HttpServlet {
 			case "Logout":
 				logout(request, response);
 				break;	
+			
 			case "UserDelete":
 				deleteUser(request,response);
 				break;
@@ -60,6 +64,10 @@ public class UserServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("username", username);
 			System.out.println(session.getAttribute("username") + "tries to login");
+			ReservationDao reservationDao = new ReservationDao();
+			StudentDao studentDao = new StudentDao();
+			List<Reservation> reservations = reservationDao.getReservationsOfStudent(studentDao.getStudent(username).getId());
+			request.setAttribute("reservations", reservations);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("StudentMain.jsp");
 			dispatcher.forward(request, response);
 		} else if (role == 3) {
@@ -90,7 +98,7 @@ public class UserServlet extends HttpServlet {
 	public void logout (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
-			session.invalidate(); 
+			session.invalidate(); // Invalidate the session
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		dispatcher.forward(request, response);
@@ -103,4 +111,6 @@ public class UserServlet extends HttpServlet {
 	    RequestDispatcher dispatcher = request.getRequestDispatcher("adminMain.jsp");
 	    dispatcher.forward(request, response);
 	}
+	
+	// Add more methods as needed
 }
