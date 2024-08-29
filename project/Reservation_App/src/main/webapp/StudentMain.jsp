@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
+<%@ page import="java.util.List" %>
+<%@ page import="ReservationModule.utils.models.Reservation" %>
 <%@ include file="topMenuStudent.jsp" %>
 <html>
 <head>
@@ -10,14 +12,65 @@
 </head>
 <body>
 <div class="content">
-        <h1>Here will be shown the reservations</h1>
-        <br><br>
-        <p>Students can choose the professor they wish to meet with. The Reservation App also provides information regarding the availability of the professor and the available dates and times for appointments.<br>
-In additon, students have the option  to register the date and time of the appointment with the respective professor, as well as the reason for the appointment. <br>Furthermore, the application manages the priority of appointments based on their urgency, such as for thesis assignment or preparation for an exchange program.<br>
-The appointments of the students can be viewed by week, month, and topic for easier tracking and organization of their activities.<br>
+        <%
+        
+        String username = (String) session.getAttribute("username");
 
-Finally, the app  provides the ability to cancel appointments both by the student and the professor, as well as the ability to reschedule appointments by the professor.</p></div>
-
-
+        if (username != null) {
+    %>
+    <div class="content">
+        <h1>Call History for <%= username %></h1>
+        <table>
+            <tr>
+                <th>Professor ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Room</th>
+                <th>Accepted</th>
+            </tr>
+            <%
+                List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
+                if (reservations != null && !reservations.isEmpty()) {
+                    for (Reservation reservation : reservations) {
+            %>
+            <tr>
+                <td><%= reservation.getProfessor() %></td>
+                <td><%= reservation.getDate() %></td>
+                <td><%= reservation.getTime() %></td>
+                <td><%= reservation.getRoom() %></td>
+                <td>
+                <% 
+                if (reservation.isAccepted()) {
+                %>
+                yes
+                <%
+                	} else {
+                %>
+                no
+                <%
+                } 
+                %>
+                </td>
+            </tr>
+            <%
+                    }
+                } else {
+            %>
+            <tr>
+                <td colspan="5">No Reservations found.</td>
+            </tr>
+            <%
+                }
+            %>
+        </table>
+    </div>
+    <%
+        } else {
+    %>
+    <p>Please <a href="login.jsp">login</a>.</p>
+    <%
+        }
+    %>
+    </div>
 </body>
 </html>
