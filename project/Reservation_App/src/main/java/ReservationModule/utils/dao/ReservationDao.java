@@ -158,9 +158,6 @@ public class ReservationDao {
 				if(resultSet.getInt("accepted") == 0) {
 					accepted = !accepted;
 				}
-				if(resultSet.getInt("accepted") == 0) {
-					accepted = !accepted;
-				}
 				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
 				reservations.add(r1);
 			}
