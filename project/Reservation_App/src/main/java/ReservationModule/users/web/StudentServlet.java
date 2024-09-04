@@ -125,9 +125,12 @@ public class StudentServlet extends HttpServlet {
 	 }
 	 
 	 
-	 private void editReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+	 private void editReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException {
 		    String id = request.getParameter("id");
-			reservationDao.deleteReservationsOfStudent(id);
+		    
+		    Reservation reservation = reservationDao.getReservation(id);
+		    
+			reservationDao.editReservation(reservation);
 			response.sendRedirect("StudentMain.jsp");	
 	 }
 }
