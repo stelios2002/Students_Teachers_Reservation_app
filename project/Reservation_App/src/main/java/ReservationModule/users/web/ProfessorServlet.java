@@ -47,6 +47,9 @@ public class ProfessorServlet extends HttpServlet {
                     case "acceptReservation":
                         acceptReservation(request, response);
                         break;
+                    case "updateReservation":
+                    	updateReservation(request, response);
+                        break;
                     case "deleteReservation":
                         deleteReservation(request, response);
                         break;    
@@ -54,6 +57,15 @@ public class ProfessorServlet extends HttpServlet {
                     	showReservations(request, response);
                     	break;
                     case "Confirm Reservations":
+                    	showUnacceptedReservations(request, response);
+                    	break;
+                    case "Set Availability":
+                    	showUnacceptedReservations(request, response);
+                    	break;
+                    case "Search Student":
+                    	showUnacceptedReservations(request, response);
+                    	break;
+                    case "Info Providing":
                     	showUnacceptedReservations(request, response);
                     	break;
                     case "Confirm":
