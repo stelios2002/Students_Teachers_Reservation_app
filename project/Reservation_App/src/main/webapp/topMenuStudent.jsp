@@ -1,11 +1,5 @@
 <div id="top-menu">
     <ul>
-        
-        <li>
-            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
-                <input class="top" type="submit" name="action" value="Main Page">
-            </form>
-        </li>
         <li>
             <form id="top" action="Reservation.jsp" method="post">
                 <input class="top" type="submit" name="action" value="Make a Reservation">
@@ -13,7 +7,12 @@
         </li>
         <li>
             <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
-                <input class="top" type="submit" name = "action" value="Reservations">
+                <input class="top" type="submit" name="action" value="Reservations">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+                <input class="top" type="submit" name="action" value="Show Professors">
             </form>
         </li>
         <li>
@@ -21,7 +20,11 @@
                 <input class="top" type="submit" name="action" value="Logout">
             </form>
         </li>
-        
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+                <input class="top" type="submit" name="action" value="Info Providing">
+            </form>
+        </li>
     </ul>
 </div>
 <style>
