@@ -1,8 +1,8 @@
 1) Διόρθωση στο Accepted του Reservation γιατί το εμφανίζει λάθος (DONE)
-2) Ο Student να μπορεί να διαγράψει το reservation του
+2) Ο Student να μπορεί να διαγράψει το reservation του (DONE)
 3) Σχόλια reservation, βαθμός προτεραιότητας (με χρώματα (στη βάση με αριθμό)), info button για το κάθε χρώμα)
 4) Main Page Professor -> Unaccepted Reservations
-5) Reservation -> Όλα τα accepted reservations με κουμπιά για edit (για αίθουσα και date/time) και cancel
+5) Reservation -> Όλα τα accepted reservations με κουμπιά για edit (για αίθουσα και date/time) και cancel (edit DONE)
 6) κουμπιά για edit (date/time) /cancel στο φοιτητή
 7) Σελίδα για να θέτει την εβδομαδιαία διαθεσιμότητα του ο καθηγητής
 8) Show Professors για το φοιτητή (βλέπει τις κενές θυρίδες διαθεσιμότητας του καθηγητή)
