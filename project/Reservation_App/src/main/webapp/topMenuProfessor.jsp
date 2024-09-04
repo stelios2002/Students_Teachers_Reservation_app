@@ -72,19 +72,19 @@
         background-color: #111;
     }
     .content {
-        padding-top: 5px; /* Adds space to account for the fixed menu */
+        padding-top: 40px; /* Adds space to account for the fixed menu */
     }
     #top {
 	    background-color:#333;
 	    display: block;
         color: white;
         text-align: center;
-        padding: 14px 16px;
+        padding: 5px 8px;
         text-decoration: none;
         border: none;
         cursor: pointer;
         font-family: inherit;
-        font-size: inherit;
+        font-size: 12px;
     
     }
 </style>
