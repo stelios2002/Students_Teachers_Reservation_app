@@ -11,11 +11,25 @@
             </form>
         </li>
         <li>
+            <form id="top" action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
+                <input class="top" type="submit" name="action" value="Set Availability">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
+                <input class="top" type="submit" value="Search Student">
+            </form>
+        </li>
+        <li>
             <form id="top" action="<%=request.getContextPath()%>/UserServlet" method="post">
                 <input class="top" type="submit" name="action" value="Logout">
             </form>
         </li>
-        
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
+                <input class="top" type="submit" name="action" value="Info Providing">
+            </form>
+        </li>
     </ul>
 </div>
 <style>
