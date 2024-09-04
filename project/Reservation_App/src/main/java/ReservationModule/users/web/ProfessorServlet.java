@@ -2,7 +2,9 @@ package ReservationModule.users.web;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -50,13 +52,18 @@ public class ProfessorServlet extends HttpServlet {
                         break;    
                     case "Reservations":
                     	showReservations(request, response);
+                    	break;
                     case "Confirm Reservations":
                     	showUnacceptedReservations(request, response);
+                    	break;
+                    case "Confirm":
+                    	editReservation(request, response);
+                    	break;
                     default:
                         response.sendRedirect("index.jsp");
                         break;
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ParseException e) {
                 throw new ServletException(e);
             }
     }
@@ -66,7 +73,32 @@ public class ProfessorServlet extends HttpServlet {
 		reservationDao.deleteReservation(id);
 		showUnacceptedReservations(request, response);		
 	}
-
+    
+    private void updateReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+    	String id = request.getParameter("reservationId");
+		Reservation r = reservationDao.getReservation(id);
+		request.setAttribute("reservation", r);
+		request.setAttribute("type", "professor");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("EditReservation.jsp");
+		dispatcher.forward(request, response);
+	}
+    
+    private void editReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException, ParseException {
+    	String studentId = request.getParameter("student_id");
+	    String professorId = request.getParameter("professor_id");
+	    LocalDate date = LocalDate.parse(request.getParameter("date"));
+	    LocalTime time = LocalTime.parse(request.getParameter("time"));
+	    int room = Integer.parseInt(request.getParameter("room"));
+	    String reservationId = request.getParameter("id");
+	    
+	    // Create Reservation object
+	    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
+	    
+	    reservationDao.editReservation(reservation);
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("AcceptedReservations.jsp");
+	    dispatcher.forward(request, response);
+    }
+    
 	private void acceptReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
 		String id = request.getParameter("reservationId");
 		reservationDao.acceptReservation(id);
@@ -84,10 +116,15 @@ public class ProfessorServlet extends HttpServlet {
 	}
     
 	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("hidden_id");
-		ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
-	    request.setAttribute("programs", programs);
-	    request.getRequestDispatcher("ShowReservations.jsp").forward(request, response);
+		ReservationDao reservationDao = new ReservationDao();
+		ProfessorDao professorDao = new ProfessorDao();
+		HttpSession session = request.getSession();
+		if((String) session.getAttribute("username") != null) {
+			List<Reservation> reservations = reservationDao.getReservationsOfProfessor(professorDao.getProfessor((String) session.getAttribute("username")).getId());
+			request.setAttribute("reservations", reservations);
+		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("AcceptedReservations.jsp");
+		dispatcher.forward(request, response);
 	}
 
     private void insertProfessor(HttpServletRequest request, HttpServletResponse response)
