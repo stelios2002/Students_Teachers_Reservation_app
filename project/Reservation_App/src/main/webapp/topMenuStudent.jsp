@@ -1,140 +1,86 @@
-package ReservationModule.users.web;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import ReservationModule.users.dao.StudentDao;
-import ReservationModule.users.models.Professor;
-import ReservationModule.users.models.Student;
-import ReservationModule.utils.dao.ReservationDao;
-import ReservationModule.utils.models.Reservation;
-import ReservationModule.users.dao.Ipassword;
-import ReservationModule.users.dao.ProfessorDao;
-
-public class StudentServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private StudentDao studentDao;
-	private ReservationDao reservationDao;
-	
-	public void init() {
-		studentDao = new StudentDao();
-        reservationDao = new ReservationDao();
+<div id="top-menu">
+    <ul>
+    	<li>
+            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+                <input class="top" type="submit" name="action" value="Reservations">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="Reservation.jsp" method="post">
+                <input class="top" type="submit" name="action" value="Make a Reservation">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+                <input class="top" type="submit" name="action" value="Show Professors">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/UserServlet" method="post">
+                <input class="top" type="submit" name="action" value="Logout">
+            </form>
+        </li>
+        <li>
+            <form id="top" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+                <input class="top" type="submit" name="action" value="Info Providing">
+            </form>
+        </li>
+    </ul>
+</div>
+<style>
+   body {
+        margin: 0;
+        padding: 0;
     }
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			 throws ServletException, IOException {
-		 doGet(request, response);
-	}
-	 
-	 protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
-	        String action = request.getParameter("action");
-	        try {
-	            switch (action) {
-	                case "register":
-	                	System.out.println("Register action called");
-		                insertStudent(request, response);
-		                break;
-	                case "Reservations":
-	                	showReservations(request, response);
-	                    break;
-	                case "Show Professors":
-	                	showReservations(request, response);
-	                    break;
-	                case "Info Providing":
-	                	showReservations(request, response);
-	                    break;
-	                case "commitReservation":
-	                	commitReservation(request, response);
-	                    break;
-	                case "deleteReservation":
-	                	deleteReservation(request, response);
-	                    break;
-	                case "editReservation":
-	                	editReservation(request, response);
-	                    break;    
-	                default:
-	                    response.sendRedirect("index.jsp");
-	                    break;
-	            }
-	        } catch (SQLException e) {
-	            throw new ServletException(e);
-	        } catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	 }
-
-	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 ReservationDao reservationDao = new ReservationDao();
-			StudentDao studentDao = new StudentDao();
-			HttpSession session = request.getSession();
-			if((String) session.getAttribute("username") != null) {
-				List<Reservation> reservations = reservationDao.getReservationsOfStudent(studentDao.getStudent((String) session.getAttribute("username")).getId());
-				request.setAttribute("reservations", reservations);
-			}
-			RequestDispatcher dispatcher = request.getRequestDispatcher("StudentMain.jsp");
-			dispatcher.forward(request, response);
-	}
-	 
-	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException, ServletException {
-		    // Retrieve parameters and parse them
-		    String studentId = request.getParameter("student_id");
-		    String professorId = request.getParameter("professor_id");
-		    LocalDate date = LocalDate.parse(request.getParameter("date"));
-		    LocalTime time = LocalTime.parse(request.getParameter("time"));
-		    int room = Integer.parseInt(request.getParameter("room"));
-		    String reservationId = request.getParameter("id");
-		    
-		    // Create Reservation object
-		    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
-		    
-		    // Insert Reservation into database
-		    reservationDao.insertReservation(reservation);
-		    
-		    showReservations(request, response);
-	}
-	 
-	 private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
-			String username = request.getParameter("username");
-		    String name = request.getParameter("name");
-		    String surname = request.getParameter("surname");
-		    String password = request.getParameter("password");
-		    int role = 2;
-		    String dept = request.getParameter("dept");
-		    String school = request.getParameter("school");
-		    int year = Integer.parseInt(request.getParameter("year"));
-		    String id = request.getParameter("id");
-		    String hashedPassword = Ipassword.hashPassword(password);
-		    System.out.println(hashedPassword);
-		    Student newStudent = new Student(username, hashedPassword, name, surname, role, dept, school, year, id);
-		    studentDao.insertStudent(newStudent);
-		    RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-		    dispatcher.forward(request, response);
-	 }
-	 
-	 
-	 private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-			String id = request.getParameter("id");
-			reservationDao.deleteReservationsOfStudent(id);
-			response.sendRedirect("StudentMain.jsp");
-	 }
-	 
-	 
-	 private void editReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-		    String id = request.getParameter("id");
-			reservationDao.deleteReservationsOfStudent(id);
-			response.sendRedirect("StudentMain.jsp");	
-	 }
-}
+    #top-menu {
+        width: 100%;
+        background-color: #333;
+        overflow: hidden;
+        position: fixed; /* Fixes the menu at the top of the page */
+        top: 0;
+        left: 0;
+        z-index: 1000; /* Ensures the menu is on top of other elements */
+    }
+    #top-menu ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center; /* Centers the menu items horizontally */
+    }
+    #top-menu li {
+        float: left;
+    }
+    #top-menu li input {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 5px 8px;
+        text-decoration: none;
+        background-color:#333;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
+    }
+    #top-menu li input:hover {
+        background-color: #111;
+    }
+    .content {
+        padding-top: 40px; /* Adds space to account for the fixed menu */
+    }
+    #top {
+	    background-color:#333;
+	    display: block;
+        color: white;
+        text-align: center;
+        padding: 5px 8px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+    
+    }
+</style>
