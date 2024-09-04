@@ -26,8 +26,11 @@ public class ReservationDao {
 	private static final String GET_UNACCEPTED_SQL = "SELECT * FROM reservations where profid = ? AND accepted = 0;";
 	private static final String GET_RESERVATIONS_OF_PROFESSOR_SQL = "SELECT * FROM reservations where profid = ?;";
 	private static final String GET_RESERVATIONS_OF_STUDENT_SQL = "SELECT * FROM reservations where studid = ?;";
-    private static final String DELETE_RESERVATIONS_SQL = "DELETE FROM reservation WHERE id = ?;";
+    private static final String DELETE_RESERVATIONS_SQL = "DELETE FROM reservations WHERE id = ?;";
+    private static final String EDIT_RESERVATIONS_SQL = "UPDATE reservations SET date = ? time = ? room = ? WHERE id = ?;";
 
+    
+    
 	protected Connection getConnection() {
         Connection connection = null;
         try {
@@ -49,6 +52,7 @@ public class ReservationDao {
         return connection;
     }
 
+	
 	public void insertReservation(Reservation reservation) throws SQLException, ParseException {
 		System.out.println(INSERT_RESERVATION_SQL);
 		// try-with-resource statement will auto close the connection.
@@ -56,7 +60,7 @@ public class ReservationDao {
 				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_RESERVATION_SQL)) {
 			preparedStatement.setString(1, reservation.getStudent());
 			preparedStatement.setString(2, reservation.getProfessor());
-			SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");//uuuu-MM-dd
+			SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
 			java.util.Date date = isoFormat.parse((reservation.getDate().toString()));
 			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 			preparedStatement.setDate(3, sqlDate);
@@ -72,11 +76,7 @@ public class ReservationDao {
 		}
 	}
 
-	public void deleteReservation(String id) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	public ArrayList<Reservation> getReservations() {
 		System.out.println(GET_RESERVATIONS_SQL);
 		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
@@ -107,6 +107,7 @@ public class ReservationDao {
 		return reservations;
 	}
 
+	
 	public ArrayList<Reservation> getReservationsOfProfessor(String id) {
 		System.out.println(GET_RESERVATIONS_OF_PROFESSOR_SQL);
 		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
@@ -136,6 +137,7 @@ public class ReservationDao {
 		}
 		return reservations;
 	}
+	
 	
 	public ArrayList<Reservation> getReservationsOfStudent(String id) {
 		System.out.println(GET_RESERVATIONS_OF_STUDENT_SQL);
@@ -168,6 +170,7 @@ public class ReservationDao {
 		return reservations;
 	}
 
+	
 	public void deleteReservationsOfStudent(String id) throws SQLException {
 		ArrayList<Reservation> reservations = getReservationsOfStudent(id);
 		for (int i = 0; i<reservations.size(); i++) {
@@ -178,6 +181,7 @@ public class ReservationDao {
 			}
 		}
 	}
+	
 	
 	public void deleteReservationsOfProfessor(String id) throws SQLException {
 		ArrayList<Reservation> reservations = getReservationsOfProfessor(id);
@@ -190,6 +194,7 @@ public class ReservationDao {
 		}
 	}
 
+	
 	public ArrayList<Reservation> getUnacceptedReservations(String id) {
 		System.out.println(GET_UNACCEPTED_SQL);
 		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
@@ -220,11 +225,30 @@ public class ReservationDao {
 		return reservations;
 	}
 
+	
 	public void acceptReservation(String id) throws SQLException {
 		try (Connection connection = getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(ACCEPT_RESERVATIONS_SQL)){
 			preparedStatement.setString(1, id);
 			preparedStatement.execute();
+		}
+	}
+	
+	public void editReservation(Reservation reservation) throws SQLException, ParseException {
+		try (Connection connection = getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(EDIT_RESERVATIONS_SQL)) {
+			SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date date = isoFormat.parse((reservation.getDate().toString()));
+			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+			preparedStatement.setDate(1, sqlDate);
+			Time time = Time.valueOf(reservation.getTime());
+			preparedStatement.setTime(2, time);
+			preparedStatement.setInt(3, reservation.getRoom());
+			preparedStatement.setString(4, reservation.getId());
+			System.out.println(preparedStatement);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getStackTrace());
 		}
 	}
 }
