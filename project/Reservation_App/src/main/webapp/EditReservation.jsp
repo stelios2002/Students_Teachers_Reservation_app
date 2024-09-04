@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
+<%@ page import="ReservationModule.utils.models.Reservation" %>
 <% if(request.getParameter("type") == "student") { %>
 <%@ include file="topMenuStudent.jsp" %>
 <% } else { %>
@@ -9,7 +10,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Make a Reservation</title>
+<title>Update the Reservation</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
 </head>
 <body>
@@ -28,30 +29,30 @@
     /ProfessorServlet <% } %>" method="post">
         <input type="hidden" name="action" value="commitReservation" />
         <h1 class="a11y-hidden">Reservation Form</h1>
+		<% 
+			Reservation reservation = (Reservation) request.getAttribute("reservation");
+		%>
       	<div>
-            <label for="date">Choose a date:</label>
-            <select name="date" id="date">               
-                <c:forEach var="professor" items="${professor}">
-                    <option value="${professor.getDate()}">${professor.getDate(}</option>
-                </c:forEach>
-            </select>
-      	</div>
-      	<div>
-            <label for="time">Choose a time:</label>
-            <select name="time" id="time">               
-                <c:forEach var="professor" items="${professor}">
-                    <option value="${professor.getTime()}">${professor.getTime()}</option>
-                </c:forEach>
-            </select>
-      	</div>
-      	<div>
-            <label for="room">Choose a room:</label>
-            <select name="room" id="room">               
-                <c:forEach var="professor" items="${professor}">
-                    <option value="${professor.getRoom()}">${professor.getRoom()}</option>
-                </c:forEach>
-            </select>
-      	</div>
+      		<input type="hidden" name="id" value="<%= reservation.getId() %>"/>
+      		<input type="hidden" name="studid" value="<%= reservation.getStudent() %>"/>
+      		<input type="hidden" name="profid" value="<%= reservation.getProfessor() %>"/>
+            <label class="label-date">
+                <input type="date" class="text" name="date" required />
+                <span class="required" value="<%= reservation.getDate() %>">Date</span>
+            </label>
+        </div>
+        <div>
+            <label class="label-time">
+                <input type="time" class="text" name="time" required />
+                <span class="required" value="<%= reservation.getTime() %>">Time</span>
+            </label>
+        </div>
+        <div>
+            <label class="label-room">
+                <input type="number" class="text" name="room" placeholder="Room Number" required />
+                <span class="required" value="<%= reservation.getRoom() %>">Room Number</span>
+            </label>
+        </div>
         <input type="submit" value="Confirm" />
     </form>
 </div>
