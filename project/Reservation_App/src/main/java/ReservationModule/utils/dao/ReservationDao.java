@@ -22,7 +22,7 @@ public class ReservationDao {
 	private static final String ACCEPT_RESERVATIONS_SQL = "UPDATE reservations SET accepted = 1 WHERE id = ?;";
 	private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservations" 
 	+ "  (studid, profid, date, time, room, id, accepted) VALUES (?, ?, ?, ?, ?, ?, ?); ";
-	private static final String GET_RESERVATIONS_SQL = "SELECT * FROM reservations;";
+	private static final String GET_RESERVATION_SQL = "SELECT * FROM reservations where id = ?;";
 	private static final String GET_UNACCEPTED_SQL = "SELECT * FROM reservations where profid = ? AND accepted = 0;";
 	private static final String GET_RESERVATIONS_OF_PROFESSOR_SQL = "SELECT * FROM reservations where profid = ?;";
 	private static final String GET_RESERVATIONS_OF_STUDENT_SQL = "SELECT * FROM reservations where studid = ?;";
@@ -76,39 +76,6 @@ public class ReservationDao {
 		}
 	}
 
-	
-	
-	public ArrayList<Reservation> getReservations() {
-		System.out.println(GET_RESERVATIONS_SQL);
-		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
-		// try-with-resource statement will auto close the connection.
-		try (Connection connection = getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(GET_RESERVATIONS_SQL);
-			ResultSet resultSet = preparedStatement.executeQuery()) {
-			
-			while(resultSet.next()) {
-				String s1 = resultSet.getString("studid");
-				String p1 = resultSet.getString("profid");
-				java.sql.Date sqlDate = resultSet.getDate("date");
-				LocalDate date = sqlDate.toLocalDate();
-				LocalTime time = resultSet.getTime("time").toLocalTime();
-				int room = resultSet.getInt("room");
-				String id = resultSet.getString("id");
-				boolean accepted = true;
-				if(resultSet.getInt("accepted") == 0) {
-					accepted = !accepted;
-				}
-				Reservation r1 = new Reservation(s1, p1, date, time, room, id, accepted);
-				reservations.add(r1);
-			}
-			System.out.println(preparedStatement);
-		} catch (SQLException e) {
-			System.out.println(e.getStackTrace());
-		}
-		return reservations;
-	}
-
-	
 	public ArrayList<Reservation> getReservationsOfProfessor(String id) {
 		System.out.println(GET_RESERVATIONS_OF_PROFESSOR_SQL);
 		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
@@ -138,7 +105,6 @@ public class ReservationDao {
 		}
 		return reservations;
 	}
-	
 	
 	public ArrayList<Reservation> getReservationsOfStudent(String id) {
 		System.out.println(GET_RESERVATIONS_OF_STUDENT_SQL);
@@ -173,16 +139,32 @@ public class ReservationDao {
 	
 
 	public Reservation getReservation(String id) {
-	    ArrayList<Reservation> reservations = getReservationsOfStudent(id);
-
-	    for (Reservation reservation : reservations) {
-	        if (reservation.getId().equals(id)) {
-	            return reservation;
-	        }
-	    }
-
-	    // If no matching reservation is found, return null or throw an exception
-	    return null;
+		System.out.println(GET_RESERVATION_SQL);
+		Reservation r1 = null;
+		// try-with-resource statement will auto close the connection.
+		try (Connection connection = getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(GET_RESERVATION_SQL);) {
+			preparedStatement.setString(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				String s1 = resultSet.getString("studid");
+				String p1 = resultSet.getString("profid");
+				java.sql.Date sqlDate = resultSet.getDate("date");
+				LocalDate date = sqlDate.toLocalDate();
+				LocalTime time = resultSet.getTime("time").toLocalTime();
+				int room = resultSet.getInt("room");
+				String rid = resultSet.getString("id");
+				boolean accepted = true;
+				if(resultSet.getInt("accepted") == 0) {
+					accepted = !accepted;
+				}
+				r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
+			}
+			System.out.println(preparedStatement);
+		} catch (SQLException e) {
+			System.out.println(e.getStackTrace());
+		}
+		return r1;
 	}
 	
 	
