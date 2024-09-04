@@ -1,3 +1,4 @@
+
 package ReservationModule.utils.dao;
 
 import java.sql.Connection;
@@ -17,17 +18,17 @@ import ReservationModule.utils.models.Reservation;
 public class ReservationDao {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
-	private String jdbcPassword = "L1ok3y20";
+	private String jdbcPassword = "root";
 
-	private static final String ACCEPT_RESERVATIONS_SQL = "UPDATE reservations SET accepted = 1 WHERE id = ?;";
-	private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservations" 
+	private static final String ACCEPT_RESERVATIONS_SQL = "UPDATE reservation SET accepted = 1 WHERE id = ?;";
+	private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservation" 
 	+ "  (studid, profid, date, time, room, id, accepted) VALUES (?, ?, ?, ?, ?, ?, ?); ";
-	private static final String GET_RESERVATIONS_SQL = "SELECT * FROM reservations;";
-	private static final String GET_UNACCEPTED_SQL = "SELECT * FROM reservations where profid = ? AND accepted = 0;";
-	private static final String GET_RESERVATIONS_OF_PROFESSOR_SQL = "SELECT * FROM reservations where profid = ?;";
-	private static final String GET_RESERVATIONS_OF_STUDENT_SQL = "SELECT * FROM reservations where studid = ?;";
-    private static final String DELETE_RESERVATIONS_SQL = "DELETE FROM reservations WHERE id = ?;";
-    private static final String EDIT_RESERVATIONS_SQL = "UPDATE reservations SET date = ? time = ? room = ? WHERE id = ?;";
+	private static final String GET_RESERVATIONS_SQL = "SELECT * FROM reservation;";
+	private static final String GET_UNACCEPTED_SQL = "SELECT * FROM reservation where profid = ? AND accepted = 0;";
+	private static final String GET_RESERVATIONS_OF_PROFESSOR_SQL = "SELECT * FROM reservation where profid = ?;";
+	private static final String GET_RESERVATIONS_OF_STUDENT_SQL = "SELECT * FROM reservation where studid = ?;";
+    private static final String DELETE_RESERVATIONS_SQL = "DELETE FROM reservation WHERE id = ?;";
+    private static final String EDIT_RESERVATIONS_SQL = "UPDATE reservation SET date = ? time = ? room = ? WHERE id = ?;";
 
     
     
@@ -229,6 +230,13 @@ public class ReservationDao {
 	public void acceptReservation(String id) throws SQLException {
 		try (Connection connection = getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(ACCEPT_RESERVATIONS_SQL)){
+			preparedStatement.setString(1, id);
+			preparedStatement.execute();
+		}
+	}
+	public void deleteReservation(String id) throws SQLException {
+		try (Connection connection = getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(DELETE_RESERVATIONS_SQL)){
 			preparedStatement.setString(1, id);
 			preparedStatement.execute();
 		}
