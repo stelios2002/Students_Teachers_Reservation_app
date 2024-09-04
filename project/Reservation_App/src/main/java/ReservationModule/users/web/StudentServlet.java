@@ -33,7 +33,7 @@ public class StudentServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			 throws ServletException, IOException {
 		 doGet(request, response);
-	 }
+	}
 	 
 	 protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {
@@ -50,7 +50,12 @@ public class StudentServlet extends HttpServlet {
 	                case "commitReservation":
 	                	commitReservation(request, response);
 	                    break;
-	                // Add more cases as needed
+	                case "deleteReservation":
+	                	deleteReservation(request, response);
+	                    break;
+	                case "editReservation":
+	                	editReservation(request, response);
+	                    break;    
 	                default:
 	                    response.sendRedirect("index.jsp");
 	                    break;
@@ -61,9 +66,10 @@ public class StudentServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    }
+	 }
 	 
-	 private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	 
+	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 ReservationDao reservationDao = new ReservationDao();
 			StudentDao studentDao = new StudentDao();
 			HttpSession session = request.getSession();
@@ -73,10 +79,9 @@ public class StudentServlet extends HttpServlet {
 			}
 			RequestDispatcher dispatcher = request.getRequestDispatcher("StudentMain.jsp");
 			dispatcher.forward(request, response);
-		}
+	}
 	 
-	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) 
-		        throws SQLException, IOException, ParseException, ServletException {
+	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException, ServletException {
 		    // Retrieve parameters and parse them
 		    String studentId = request.getParameter("student_id");
 		    String professorId = request.getParameter("professor_id");
@@ -92,10 +97,9 @@ public class StudentServlet extends HttpServlet {
 		    reservationDao.insertReservation(reservation);
 		    
 		    showReservations(request, response);
-		}
+	}
 	 
-	 private void insertStudent(HttpServletRequest request, HttpServletResponse response) 
-				throws SQLException, IOException, ServletException {
+	 private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 			String username = request.getParameter("username");
 		    String name = request.getParameter("name");
 		    String surname = request.getParameter("surname");
@@ -111,5 +115,19 @@ public class StudentServlet extends HttpServlet {
 		    studentDao.insertStudent(newStudent);
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		    dispatcher.forward(request, response);
-		}
+	 }
+	 
+	 
+	 private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+			String id = request.getParameter("id");
+			reservationDao.deleteReservationsOfStudent(id);
+			response.sendRedirect("StudentMain.jsp");
+	 }
+	 
+	 
+	 private void editReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		    String id = request.getParameter("id");
+			reservationDao.deleteReservationsOfStudent(id);
+			response.sendRedirect("StudentMain.jsp");	
+	 }
 }
