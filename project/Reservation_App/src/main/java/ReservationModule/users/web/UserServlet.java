@@ -15,6 +15,7 @@ import ReservationModule.users.dao.UserDao;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.dao.Ipassword;
+import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.users.dao.StudentDao;
 
 public class UserServlet extends HttpServlet {
@@ -73,6 +74,11 @@ public class UserServlet extends HttpServlet {
 		} else if (role == 3) {
 			HttpSession session = request.getSession();
 			session.setAttribute("username", username);
+			System.out.println(session.getAttribute("username") + "tries to login");
+			ReservationDao reservationDao = new ReservationDao();
+			ProfessorDao professorDao = new ProfessorDao();
+			List<Reservation> reservations = reservationDao.getUnacceptedReservations(professorDao.getProfessor((String) session.getAttribute("username")).getId());
+			request.setAttribute("reservations", reservations);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("ProfessorMain.jsp");
 			dispatcher.forward(request, response);
 		} else if (role == 1) {
