@@ -15,10 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.StudentDao;
+import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.dao.Ipassword;
+import ReservationModule.users.dao.ProfessorDao;
 
 public class StudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +46,13 @@ public class StudentServlet extends HttpServlet {
 	                	System.out.println("Register action called");
 		                insertStudent(request, response);
 		                break;
-	                case "Main Page":
+	                case "Reservations":
+	                	showReservations(request, response);
+	                    break;
+	                case "Show Professors":
+	                	showReservations(request, response);
+	                    break;
+	                case "Info Providing":
 	                	showReservations(request, response);
 	                    break;
 	                case "commitReservation":
@@ -67,8 +75,7 @@ public class StudentServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 	 }
-	 
-	 
+
 	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 ReservationDao reservationDao = new ReservationDao();
 			StudentDao studentDao = new StudentDao();
@@ -125,12 +132,9 @@ public class StudentServlet extends HttpServlet {
 	 }
 	 
 	 
-	 private void editReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException {
+	 private void editReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 		    String id = request.getParameter("id");
-		    
-		    Reservation reservation = reservationDao.getReservation(id);
-		    
-			reservationDao.editReservation(reservation);
+			reservationDao.deleteReservationsOfStudent(id);
 			response.sendRedirect("StudentMain.jsp");	
 	 }
 }
