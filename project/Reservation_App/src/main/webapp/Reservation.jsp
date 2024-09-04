@@ -15,40 +15,43 @@
         <input type="hidden" name="action" value="commitReservation" />
         <h1 class="a11y-hidden">Reservation Form</h1>
 
-        <div>
-            <label class="label-id">
-                <input type="text" class="text" name="student_id" placeholder="Student Id" required />
-                <span class="required">Student Id</span>
-            </label>
-        </div>
 
         <div>
-            <label class="label-id">
-                <input type="text" class="text" name="professor_id" placeholder="Professor Id" required />
-                <span class="required">Professor Id</span>
-            </label>
+            <label for="professor">Choose a professor:</label>
+            <select name="id" id="id">
+                <c:forEach var="professor" items="${professor}">
+                    <option value="${professor.getId()}">${professor.getId()}</option>
+                </c:forEach>
+            </select>
         </div>
 
-        <div>
-            <label class="label-date">
-                <input type="date" class="text" name="date" required />
-                <span class="required">Date</span>
-            </label>
-        </div>
-
-        <div>
-            <label class="label-time">
-                <input type="time" class="text" name="time" required />
-                <span class="required">Time</span>
-            </label>
-        </div>
-
-        <div>
-            <label class="label-room">
-                <input type="number" class="text" name="room" placeholder="Room Number" required />
-                <span class="required">Room Number</span>
-            </label>
-        </div>
+      	<div>
+            <label for="date">Choose a date:</label>
+            <select name="date" id="date">               
+                <c:forEach var="professor" items="${professor}">
+                    <option value="${professor.getDate()}">${professor.getDate(}</option>
+                </c:forEach>
+            </select>
+      	</div>
+      	
+      	<div>
+            <label for="time">Choose a time:</label>
+            <select name="time" id="time">               
+                <c:forEach var="professor" items="${professor}">
+                    <option value="${professor.getTime()}">${professor.getTime()}</option>
+                </c:forEach>
+            </select>
+      	</div>
+      	
+      	<div>
+            <label for="room">Choose a room:</label>
+            <select name="room" id="room">               
+                <c:forEach var="professor" items="${professor}">
+                    <option value="${professor.getRoom()}">${professor.getRoom()}</option>
+                </c:forEach>
+            </select>
+      	</div>
+      	
 
         <div>
             <label class="label-id">
