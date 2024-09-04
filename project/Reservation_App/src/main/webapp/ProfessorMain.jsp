@@ -12,11 +12,10 @@
 </head>
 <body>
 <div class="content">
-        <%
+    <%
+    String username = (String) session.getAttribute("username");
 
-        String username = (String) session.getAttribute("username");
-
-        if (username != null) {
+    if (username != null) {
     %>
     <div class="content">
         <h1> Unaccepted Reservations of <%= username %></h1>
@@ -26,18 +25,34 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Room</th>
+                <th>Actions</th>
             </tr>
             <%
                 List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
                 if (reservations != null && !reservations.isEmpty()) {
                     for (Reservation reservation : reservations) {
+                        String reservationId = reservation.getId(); // Assume there is a method getId() to get the reservation ID
             %>
             <tr>
                 <td><%= reservation.getStudent() %></td>
                 <td><%= reservation.getDate() %></td>
                 <td><%= reservation.getTime() %></td>
                 <td><%= reservation.getRoom() %></td>
-
+                <td>
+                
+                    <!-- Accept button -->
+                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    	<input type="hidden" name="action" value="acceptReservation">
+                        <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
+                        <input type="submit" value="Accept">
+                    </form>
+                    <!-- Delete button -->
+                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    	<input type="hidden" name="action" value="deleteReservation">
+                        <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
             </tr>
             <%
                     }
@@ -58,6 +73,6 @@
     <%
         }
     %>
-    </div>
+</div>
 </body>
 </html>
