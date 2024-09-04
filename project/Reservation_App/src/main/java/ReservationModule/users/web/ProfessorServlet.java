@@ -3,11 +3,14 @@ package ReservationModule.users.web;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.ProfessorDao;
 import ReservationModule.utils.dao.ReservationDao;
@@ -44,10 +47,8 @@ public class ProfessorServlet extends HttpServlet {
                         break;
                     case "Reservations":
                     	showReservations(request, response);
-                    	break;
                     case "Confirm Reservations":
                     	showUnacceptedReservations(request, response);
-                    	break;
                     default:
                         response.sendRedirect("index.jsp");
                         break;
@@ -64,16 +65,19 @@ public class ProfessorServlet extends HttpServlet {
 	}
     
     private void showUnacceptedReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("hidden_id");
-		ArrayList<Reservation> reservations = reservationDao.getUnacceptedReservations(id);
-	    request.setAttribute("reservations", reservations);
-	    request.getRequestDispatcher("ShowReservations.jsp").forward(request, response);
+    	HttpSession session = request.getSession();
+		if((String) session.getAttribute("username") != null) {
+			List<Reservation> reservations = reservationDao.getUnacceptedReservations(professorDao.getProfessor((String) session.getAttribute("username")).getId());
+			request.setAttribute("reservations", reservations);
+		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("ProfessorMain.jsp");
+		dispatcher.forward(request, response);
 	}
     
 	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("hidden_id");
-		ArrayList<Reservation> reservations = reservationDao.getReservationsOfProfessor(id);
-	    request.setAttribute("reservations", reservations);
+		ArrayList<Reservation> programs = reservationDao.getReservationsOfProfessor(id);
+	    request.setAttribute("programs", programs);
 	    request.getRequestDispatcher("ShowReservations.jsp").forward(request, response);
 	}
 
