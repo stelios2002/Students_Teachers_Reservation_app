@@ -7,7 +7,7 @@
         </li>
         <li>
             <form id="top" action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
-                <input class="top" type="submit" value="Reservations">
+                <input class="top" type="submit" name="action" value="Reservations">
             </form>
         </li>
         <li>
@@ -17,7 +17,7 @@
         </li>
         <li>
             <form id="top" action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
-                <input class="top" type="submit" value="Search Student">
+                <input class="top" type="submit" name="action" value="Search Student">
             </form>
         </li>
         <li>
