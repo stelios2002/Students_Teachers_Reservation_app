@@ -45,6 +45,9 @@ public class ProfessorServlet extends HttpServlet {
                     case "acceptReservation":
                         acceptReservation(request, response);
                         break;
+                    case "deleteReservation":
+                        deleteReservation(request, response);
+                        break;    
                     case "Reservations":
                     	showReservations(request, response);
                     case "Confirm Reservations":
@@ -58,8 +61,14 @@ public class ProfessorServlet extends HttpServlet {
             }
     }
 
-    private void acceptReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-		String id = request.getParameter("reservation_id");
+    private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+    	String id = request.getParameter("reservationId");
+		reservationDao.deleteReservation(id);
+		showUnacceptedReservations(request, response);		
+	}
+
+	private void acceptReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String id = request.getParameter("reservationId");
 		reservationDao.acceptReservation(id);
 		showUnacceptedReservations(request, response);		
 	}
