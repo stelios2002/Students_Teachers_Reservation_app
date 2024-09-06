@@ -18,16 +18,14 @@
 <div class="contentReservation">
     <form id="reservation-form" class="reservation-form" autocomplete="off" action="
     <% 
-    	if(request.getParameter("type") == "student") { 
+    	if(request.getAttribute("type").equals("student")) { 
     %>
-    <%=request.getContextPath()%>
-    /StudentServlet
+    	<%=request.getContextPath()%>/StudentServlet
     <%
     	} else { 
     %>
-    <%=request.getContextPath()%>
-    /ProfessorServlet <% } %>" method="post">
-        <input type="hidden" name="action" value="commitReservation" />
+    	<%=request.getContextPath()%>/ProfessorServlet <% } %>" method="post">
+        <input type="hidden" name="action" value="Confirm" />
         <h1 class="a11y-hidden">Reservation Form</h1>
 		<% 
 			Reservation reservation = (Reservation) request.getAttribute("reservation");
