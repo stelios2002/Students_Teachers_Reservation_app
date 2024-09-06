@@ -96,19 +96,18 @@ public class ProfessorServlet extends HttpServlet {
 	}
     
     private void editReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException, ParseException {
-    	String studentId = request.getParameter("student_id");
-	    String professorId = request.getParameter("professor_id");
+    	String studentId = request.getParameter("studid");
+	    String professorId = request.getParameter("profid");
 	    LocalDate date = LocalDate.parse(request.getParameter("date"));
 	    LocalTime time = LocalTime.parse(request.getParameter("time"));
 	    int room = Integer.parseInt(request.getParameter("room"));
 	    String reservationId = request.getParameter("id");
-	    
+	    System.out.println("I am going inside");
 	    // Create Reservation object
 	    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
 	    
 	    reservationDao.editReservation(reservation);
-	    RequestDispatcher dispatcher = request.getRequestDispatcher("AcceptedReservations.jsp");
-	    dispatcher.forward(request, response);
+	    showReservations(request, response);
     }
     
 	private void acceptReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
