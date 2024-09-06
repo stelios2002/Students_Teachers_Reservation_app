@@ -39,13 +39,6 @@
                 <td><%= reservation.getTime() %></td>
                 <td><%= reservation.getRoom() %></td>
                 <td>
-                
-                    <!-- Accept button -->
-                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
-                    	<input type="hidden" name="action" value="acceptReservation">
-                        <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
-                        <input type="submit" value="Accept">
-                    </form>
                     <!-- Update button -->
                     <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
                     	<input type="hidden" name="action" value="updateReservation">
