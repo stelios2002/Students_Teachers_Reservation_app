@@ -27,7 +27,7 @@ public class ReservationDao {
 	private static final String GET_RESERVATIONS_OF_PROFESSOR_SQL = "SELECT * FROM reservations where profid = ?;";
 	private static final String GET_RESERVATIONS_OF_STUDENT_SQL = "SELECT * FROM reservations where studid = ?;";
     private static final String DELETE_RESERVATIONS_SQL = "DELETE FROM reservations WHERE id = ?;";
-    private static final String EDIT_RESERVATIONS_SQL = "UPDATE reservations SET date = ? time = ? room = ? WHERE id = ?;";
+    private static final String EDIT_RESERVATIONS_SQL = "UPDATE reservations SET date = ?, time = ?, room = ? WHERE id = ?;";
 
     
     
@@ -93,11 +93,10 @@ public class ReservationDao {
 				int room = resultSet.getInt("room");
 				String rid = resultSet.getString("id");
 				boolean accepted = true;
-				if(resultSet.getInt("accepted") == 0) {
-					accepted = !accepted;
+				if(resultSet.getInt("accepted") != 0) {
+					Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
+					reservations.add(r1);
 				}
-				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
-				reservations.add(r1);
 			}
 			System.out.println(preparedStatement);
 		} catch (SQLException e) {
@@ -253,7 +252,7 @@ public class ReservationDao {
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 		}
 	}
 }
