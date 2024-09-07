@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,12 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.StudentDao;
-import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.dao.Ipassword;
-import ReservationModule.users.dao.ProfessorDao;
 
 public class StudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -90,19 +89,24 @@ public class StudentServlet extends HttpServlet {
 	 
 	 private void commitReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException, ServletException {
 		    // Retrieve parameters and parse them
-		    String studentId = request.getParameter("student_id");
-		    String professorId = request.getParameter("professor_id");
-		    LocalDate date = LocalDate.parse(request.getParameter("date"));
-		    LocalTime time = LocalTime.parse(request.getParameter("time"));
-		    int room = Integer.parseInt(request.getParameter("room"));
-		    String reservationId = request.getParameter("id");
-		    
-		    // Create Reservation object
-		    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
-		    
-		    // Insert Reservation into database
-		    reservationDao.insertReservation(reservation);
-		    
+		 	HttpSession session = request.getSession();
+			if((String) session.getAttribute("username") != null) {
+				String username = (String) session.getAttribute("username");
+			    String studentId = studentDao.getStudent(username).getId();
+			    String professorId = request.getParameter("professor_id");
+			    LocalDate date = LocalDate.parse(request.getParameter("date"));
+			    LocalTime time = LocalTime.parse(request.getParameter("time"));
+			    int room = Integer.parseInt(request.getParameter("room"));
+			    String reservationId = UUID.randomUUID().toString();
+			    while(!reservationDao.checkAvailability(reservationId)) {
+			    	reservationId = UUID.randomUUID().toString();
+			    }
+			    // Create Reservation object
+			    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
+			    
+			    // Insert Reservation into database
+			    reservationDao.insertReservation(reservation);
+			}		    
 		    showReservations(request, response);
 	}
 	 
