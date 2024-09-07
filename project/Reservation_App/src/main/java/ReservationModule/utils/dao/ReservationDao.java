@@ -255,4 +255,13 @@ public class ReservationDao {
 			e.printStackTrace();
 		}
 	}
+
+
+	public boolean checkAvailability(String reservationId) {
+		Reservation r1 = getReservation(reservationId);
+		if (r1!=null) {
+			return false;
+		}
+		return true;
+	}
 }
