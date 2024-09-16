@@ -17,17 +17,17 @@ import ReservationModule.utils.models.Reservation;
 public class ReservationDao {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
-	private String jdbcPassword = "L1ok3y20";
+	private String jdbcPassword = "giorgos2002!";
 
 	private static final String ACCEPT_RESERVATIONS_SQL = "UPDATE reservations SET accepted = 1 WHERE id = ?;";
 	private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservations" 
-	+ "  (studid, profid, date, time, room, id, accepted) VALUES (?, ?, ?, ?, ?, ?, ?); ";
+	+ "  (studid, profid, date, time, room, id, accepted, priority, comment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?); ";
 	private static final String GET_RESERVATION_SQL = "SELECT * FROM reservations where id = ?;";
 	private static final String GET_UNACCEPTED_SQL = "SELECT * FROM reservations where profid = ? AND accepted = 0;";
 	private static final String GET_RESERVATIONS_OF_PROFESSOR_SQL = "SELECT * FROM reservations where profid = ?;";
 	private static final String GET_RESERVATIONS_OF_STUDENT_SQL = "SELECT * FROM reservations where studid = ?;";
     private static final String DELETE_RESERVATIONS_SQL = "DELETE FROM reservations WHERE id = ?;";
-    private static final String EDIT_RESERVATIONS_SQL = "UPDATE reservations SET date = ?, time = ?, room = ? WHERE id = ?;";
+    private static final String EDIT_RESERVATIONS_SQL = "UPDATE reservations SET date = ?, time = ?, room = ?, priority = ?, comment = ? WHERE id = ?;";
 
     
     
@@ -40,7 +40,7 @@ public class ReservationDao {
              System.out.println("Driver loaded successfully!");
 
              connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-             // Print debug statement
+
              System.out.println("Connection established successfully!");
         } catch (SQLException e) {
             System.err.println("SQL Exception: " + e.getMessage());
@@ -69,6 +69,8 @@ public class ReservationDao {
 			preparedStatement.setInt(5, reservation.getRoom());
 			preparedStatement.setString(6, reservation.getId());
 			preparedStatement.setInt(7, 0);
+			preparedStatement.setInt(8, reservation.getPriority());
+			preparedStatement.setString(9, reservation.getComment());
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -92,9 +94,12 @@ public class ReservationDao {
 				LocalTime time = resultSet.getTime("time").toLocalTime();
 				int room = resultSet.getInt("room");
 				String rid = resultSet.getString("id");
-				boolean accepted = true;
+				boolean accepted = true;	
+				int priority = resultSet.getInt("priority");
+				String comment = resultSet.getString("comment");
+				
 				if(resultSet.getInt("accepted") != 0) {
-					Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
+					Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted, priority, comment);
 					reservations.add(r1);
 				}
 			}
@@ -123,10 +128,12 @@ public class ReservationDao {
 				int room = resultSet.getInt("room");
 				String rid = resultSet.getString("id");
 				boolean accepted = true;
+				int priority = resultSet.getInt("priority");
+				String comment = resultSet.getString("comment");
 				if(resultSet.getInt("accepted") == 0) {
 					accepted = !accepted;
 				}
-				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
+				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted, priority, comment);
 				reservations.add(r1);
 			}
 			System.out.println(preparedStatement);
@@ -154,10 +161,12 @@ public class ReservationDao {
 				int room = resultSet.getInt("room");
 				String rid = resultSet.getString("id");
 				boolean accepted = true;
+				int priority = resultSet.getInt("priority");
+				String comment = resultSet.getString("comment");
 				if(resultSet.getInt("accepted") == 0) {
 					accepted = !accepted;
 				}
-				r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
+				r1 = new Reservation(s1, p1, date, time, room, rid, accepted, priority, comment);
 			}
 			System.out.println(preparedStatement);
 		} catch (SQLException e) {
@@ -208,10 +217,12 @@ public class ReservationDao {
 				int room = resultSet.getInt("room");
 				String rid = resultSet.getString("id");
 				boolean accepted = true;
+				int priority = resultSet.getInt("priority");
+				String comment = resultSet.getString("comment");
 				if(resultSet.getInt("accepted") == 0) {
 					accepted = !accepted;
 				}
-				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted);
+				Reservation r1 = new Reservation(s1, p1, date, time, room, rid, accepted, priority, comment);
 				reservations.add(r1);
 			}
 			System.out.println(preparedStatement);
@@ -247,8 +258,10 @@ public class ReservationDao {
 			preparedStatement.setDate(1, sqlDate);
 			Time time = Time.valueOf(reservation.getTime());
 			preparedStatement.setTime(2, time);
-			preparedStatement.setInt(3, reservation.getRoom());
-			preparedStatement.setString(4, reservation.getId());
+			preparedStatement.setInt(3, reservation.getRoom());			
+			preparedStatement.setInt(4, reservation.getPriority());
+			preparedStatement.setString(5, reservation.getComment());
+			preparedStatement.setString(6, reservation.getId());
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
