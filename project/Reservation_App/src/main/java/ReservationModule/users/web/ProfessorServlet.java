@@ -1,4 +1,3 @@
-
 package ReservationModule.users.web;
 
 import java.io.IOException;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.ProfessorDao;
+import ReservationModule.utils.dao.AvailabilityDao;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.models.Professor;
@@ -60,9 +60,6 @@ public class ProfessorServlet extends HttpServlet {
                     case "Confirm Reservations":
                     	showUnacceptedReservations(request, response);
                     	break;
-                    case "Set Availability":
-                    	setAvailability(request, response);
-                    	break;
                     case "Search Student":
                     	showUnacceptedReservations(request, response);
                     	break;
@@ -72,6 +69,12 @@ public class ProfessorServlet extends HttpServlet {
                     case "Confirm":
                     	editReservation(request, response);
                     	break;
+                    case "SetAvailability":
+                    	setAvailability(request, response);
+                    	break;
+                    case "Set Availability":
+                    	goToAvailability(request, response);
+                    	break;
                     default:
                         response.sendRedirect("index.jsp");
                         break;
@@ -80,13 +83,47 @@ public class ProfessorServlet extends HttpServlet {
                 throw new ServletException(e);
             }
     }
-	
-	private void setAvailability(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("SetAvailability.jsp");
+
+    private void goToAvailability(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	RequestDispatcher dispatcher = request.getRequestDispatcher("SetAvailability.jsp");
 		dispatcher.forward(request, response);
 	}
 
-    private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+	private void setAvailability(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		String day = request.getParameter("dayOfWeek");
+		boolean[] timeslots = {false, false, false, false,
+				false, false, false, false,
+				false, false, false, false,
+				false, false, false, false};
+		String[] Selected = request.getParameterValues("timeSlots");
+		int[] s = new int[Selected.length];
+		for (int i = 0; i< Selected.length; i++) {
+			s[i] = Integer.parseInt(Selected[i]);
+		}
+		for (int i : s) {
+			timeslots[i] = true;
+		}
+		Professor professor;
+		HttpSession session = request.getSession();
+		if((String) session.getAttribute("username") != null) {
+			professor = professorDao.getProfessor((String) session.getAttribute("username"));
+			AvailabilityDao availabilityDao = new AvailabilityDao();
+			if(availabilityDao.isRegisteredAvailable(day, professor)) {
+				availabilityDao.updateAvailability(day, timeslots, professor);
+			} else {
+				availabilityDao.setAvailability(day, timeslots, professor);
+			}
+		}
+		else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+			dispatcher.forward(request, response);
+		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("ProfessorMain.jsp");
+		dispatcher.forward(request, response);
+	}
+		
+
+	private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
     	String id = request.getParameter("reservationId");
 		reservationDao.deleteReservation(id);
 		showUnacceptedReservations(request, response);		
@@ -110,7 +147,7 @@ public class ProfessorServlet extends HttpServlet {
 	    String reservationId = request.getParameter("id");
 	    System.out.println("I am going inside");
 	    // Create Reservation object
-	    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
+	    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, true);
 	    
 	    reservationDao.editReservation(reservation);
 	    showReservations(request, response);
