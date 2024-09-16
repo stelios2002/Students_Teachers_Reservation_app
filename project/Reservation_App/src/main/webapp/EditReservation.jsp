@@ -51,6 +51,18 @@
                 <span class="required" value="<%= reservation.getRoom() %>">Room Number</span>
             </label>
         </div>
+        <div>
+            <label class="label-priority">
+                <input type="number" class="text" name="priority" placeholder="Priority" required />
+                <span class="required" value="<%= reservation.getPriority() %>">Priority</span>
+            </label>
+        </div>
+        <div>
+            <label class="label-comment">
+                <input type="text" class="text" name="comment" placeholder="Comment" required />
+                <span class="required" value="<%= reservation.getComment() %>">Comment</span>
+            </label>
+        </div>
         <input type="submit" value="Confirm" />
     </form>
 </div>

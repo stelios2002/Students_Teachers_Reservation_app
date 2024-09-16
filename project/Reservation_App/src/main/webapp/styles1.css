@@ -225,10 +225,32 @@ input[type="checkbox"]:checked + label span::after {
     	padding: 20px;
     }
     
+    
+.priority-one {
+    background-color: red;
+    color: white;
+}
 
+.priority-two {
+    background-color: orange;
+    color: white;
+}
 
+.priority-three {
+    background-color: yellow;
+    color: black;
+}
+
+.priority-four {
+    background-color: cyan;
+    color: black;
+}
 
     
+.priority-five {
+    background-color: green;
+    color: white;
+}
 
 
 

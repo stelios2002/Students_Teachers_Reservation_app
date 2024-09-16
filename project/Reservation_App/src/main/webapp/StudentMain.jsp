@@ -13,7 +13,6 @@
 <body>
 <div class="content">
         <%
-        
         String username = (String) session.getAttribute("username");
 
         if (username != null) {
@@ -27,37 +26,49 @@
                 <th>Time</th>
                 <th>Room</th>
                 <th>Accepted</th>
+                <th>Priority</th>
+                <th>Comment</th>
             </tr>
             <%
                 List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
                 if (reservations != null && !reservations.isEmpty()) {
                     for (Reservation reservation : reservations) {
+                        String priorityClass = "";
+                        switch (reservation.getPriority()) {
+                            case 1:
+                                priorityClass = "priority-one";
+                                break;
+                            case 2:
+                                priorityClass = "priority-two";
+                                break;
+                            case 3:
+                                priorityClass = "priority-three";
+                                break;
+                            case 4:
+                                priorityClass = "priority-four";
+                                break;
+                            case 5:
+                                priorityClass = "priority-five";
+                                break;
+                            default:
+                                priorityClass = "";
+                        }
             %>
-            <tr>
+            <tr class="<%= priorityClass %>">
                 <td><%= reservation.getProfessor() %></td>
                 <td><%= reservation.getDate() %></td>
                 <td><%= reservation.getTime() %></td>
                 <td><%= reservation.getRoom() %></td>
-                <td>
-                <% 
-                if (reservation.isAccepted()) {
-                %>
-                yes
-                <%
-                	} else {
-                %>
-                no
-                <%
-                } 
-                %>
-                </td>
+                <td><%= reservation.isAccepted() ? "yes" : "no" %></td>
+                <td><%= reservation.getPriority() %></td>
+                <td><%= reservation.getComment() %></td>
             </tr>
             <%
                     }
                 } else {
             %>
             <tr>
-                <td colspan="5">No reservations found.</td>
+                <td colspan="7">No reservations found.</td>
             </tr>
             <%
                 }
