@@ -101,8 +101,12 @@ public class StudentServlet extends HttpServlet {
 			    while(!reservationDao.checkAvailability(reservationId)) {
 			    	reservationId = UUID.randomUUID().toString();
 			    }
+			    
+			    int priority = Integer.parseInt(request.getParameter("priority"));
+			    String comment = request.getParameter("comment");
+			    
 			    // Create Reservation object
-			    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false);
+			    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false, priority, comment);
 			    
 			    // Insert Reservation into database
 			    reservationDao.insertReservation(reservation);
