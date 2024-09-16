@@ -118,8 +118,7 @@ public class ProfessorServlet extends HttpServlet {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 				dispatcher.forward(request, response);
 			}
-			RequestDispatcher dispatcher = request.getRequestDispatcher("ProfessorMain.jsp");
-			dispatcher.forward(request, response);
+			showUnacceptedReservations(request,response);
 		}
 			
 
