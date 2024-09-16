@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
@@ -16,10 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.StudentDao;
+import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.dao.Ipassword;
+import ReservationModule.users.dao.ProfessorDao;
 
 public class StudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -48,9 +52,7 @@ public class StudentServlet extends HttpServlet {
 	                case "Reservations":
 	                	showReservations(request, response);
 	                    break;
-	                case "Show Professors":
-	                	showReservations(request, response);
-	                    break;
+	              
 	                case "Info Providing":
 	                	showReservations(request, response);
 	                    break;
@@ -62,7 +64,10 @@ public class StudentServlet extends HttpServlet {
 	                    break;
 	                case "editReservation":
 	                	editReservation(request, response);
-	                    break;    
+	                    break;
+	                case "Show Professors":
+	                	showProfessors(request, response);
+	                	break;
 	                default:
 	                    response.sendRedirect("index.jsp");
 	                    break;
@@ -74,6 +79,34 @@ public class StudentServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 	 }
+	 
+	private void showAvailableDates(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		   ReservationDao reservationDao = new ReservationDao();
+	       List<String> availableDays = reservationDao.getAvailableDays();
+	        
+	        // Generate dates for the available days
+	        
+	        Map<String, List<LocalDate>> availableDates = reservationDao.generateAvailableDates(availableDays);
+	        
+	        // Set the data in the request scope
+	        request.setAttribute("availableDates", availableDates);
+	        
+	        // Forward to JSP
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("Reservation.jsp");
+			dispatcher.forward(request, response);
+	}
+	
+	private void showProfessors(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+		ProfessorDao professorDao = new ProfessorDao();
+		StudentDao studentDao = new StudentDao();
+		HttpSession session = request.getSession();
+		if((String) session.getAttribute("username") != null) {
+			ArrayList<Professor> professors = professorDao.getProfessors();
+			request.setAttribute("professors", professors);
+		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("ShowProfessors.jsp");
+		dispatcher.forward(request, response);
+	}
 
 	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 ReservationDao reservationDao = new ReservationDao();
@@ -101,13 +134,12 @@ public class StudentServlet extends HttpServlet {
 			    while(!reservationDao.checkAvailability(reservationId)) {
 			    	reservationId = UUID.randomUUID().toString();
 			    }
-			    
+			    // Create Reservation object
 			    int priority = Integer.parseInt(request.getParameter("priority"));
 			    String comment = request.getParameter("comment");
-			    
+
 			    // Create Reservation object
 			    Reservation reservation = new Reservation(studentId, professorId, date, time, room, reservationId, false, priority, comment);
-			    
 			    // Insert Reservation into database
 			    reservationDao.insertReservation(reservation);
 			}		    
