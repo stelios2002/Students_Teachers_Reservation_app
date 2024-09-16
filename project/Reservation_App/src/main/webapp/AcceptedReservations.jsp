@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -9,6 +10,29 @@
 <meta charset="ISO-8859-1">
 <title>Professor Page</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
+<style>
+			table {
+	            width: 100%;
+	            border-collapse: collapse;
+	        }
+	        th {
+	        
+	        	background-color:black;
+	            color:white;
+	            
+	        }
+	        td {
+	        
+	        	background-color:#333;
+	            color:white;
+	        }
+	        th, td {
+	            border: 1px solid white;
+	            padding: 10px;
+	            text-align: left;
+	            
+	        }
+</style>
 </head>
 <body>
 <div class="content">
@@ -18,7 +42,7 @@
     if (username != null) {
     %>
     <div class="content">
-        <h1> Accepted Reservations of <%= username %></h1>
+        <h1 style ="text-align:center;"> Accepted Reservations of <%= username %></h1>
         <table>
             <tr>
                 <th>Student Id</th>
@@ -61,19 +85,19 @@
                 <td><%= reservation.getRoom() %></td>
                 <td><%= reservation.getPriority() %></td>
                 <td><%= reservation.getComment() %></td>
-                <td>          
+                         
                 <td>
                     <!-- Update button -->
-                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    <form class="buttonForm" action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
                     	<input type="hidden" name="action" value="updateReservation">
                         <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
-                        <input type="submit" value="Update">
+                        <input class="updateB" type="submit" value="Update">
                     </form>
                     <!-- Delete button -->
-                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    <form class="buttonForm2 action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
                     	<input type="hidden" name="action" value="deleteReservation">
                         <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
-                        <input type="submit" value="Delete">
+                        <input class="deleteB" type="submit" value="Delete">
                     </form>
                 </td>
             </tr>
