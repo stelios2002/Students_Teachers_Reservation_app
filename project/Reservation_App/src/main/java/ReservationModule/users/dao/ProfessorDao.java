@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import ReservationModule.users.models.Professor;
 import ReservationModule.utils.dao.ReservationDao;
@@ -12,7 +13,7 @@ import ReservationModule.utils.dao.ReservationDao;
 public class ProfessorDao {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
-	private String jdbcPassword = "L1ok3y20";
+	private String jdbcPassword = "root";
 
 	private static final String INSERT_USER_SQL = "INSERT INTO user (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?)";
 	private static final String INSERT_PROFESSOR_SQL = "INSERT INTO professor (username, department, school, specialty, id) VALUES (?, ?, ?, ?, ?)";
@@ -20,6 +21,8 @@ public class ProfessorDao {
 	private static final String LOGIN_PROFESSOR_SQL = "SELECT * FROM professor WHERE username = ?;";
 	private static final String ID_PROFESSOR_SQL = "SELECT * FROM professor WHERE id = ?;";
     private static final String DELETE_PROFESSOR_SQL = "DELETE FROM professor WHERE id = ?;";
+    private static final String GET_USERS_SQL ="SELECT * FROM user WHERE role = 3;";
+    
 
 	protected Connection getConnection() {
         Connection connection = null;
@@ -60,6 +63,23 @@ public class ProfessorDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	public ArrayList<Professor> getProfessors() throws SQLException {
+		
+		try (Connection connection = getConnection();
+		    PreparedStatement userStatement = connection.prepareStatement(GET_USERS_SQL)){
+			ArrayList<Professor> professors = new ArrayList<Professor>();
+			try (ResultSet rsu = userStatement.executeQuery()) { 
+				while (rsu.next()) {
+					professors.add(getProfessor(rsu.getString("username")));
+						
+				}
+				return professors;
+			}
+			
+		}
+		         
+		
 	}
 
 	public Professor getProfessor(String username) {
