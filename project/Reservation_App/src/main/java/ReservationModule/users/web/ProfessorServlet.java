@@ -1,3 +1,4 @@
+
 package ReservationModule.users.web;
 
 import java.io.IOException;
@@ -60,7 +61,7 @@ public class ProfessorServlet extends HttpServlet {
                     	showUnacceptedReservations(request, response);
                     	break;
                     case "Set Availability":
-                    	showUnacceptedReservations(request, response);
+                    	setAvailability(request, response);
                     	break;
                     case "Search Student":
                     	showUnacceptedReservations(request, response);
@@ -79,6 +80,11 @@ public class ProfessorServlet extends HttpServlet {
                 throw new ServletException(e);
             }
     }
+	
+	private void setAvailability(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("SetAvailability.jsp");
+		dispatcher.forward(request, response);
+	}
 
     private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
     	String id = request.getParameter("reservationId");
