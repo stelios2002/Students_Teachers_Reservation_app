@@ -215,14 +215,21 @@ input[type="checkbox"]:checked + label span::after {
   background: hsl(var(--fgColorH), var(--fgColorS), var(--fgColorL));
 }
 .content {
-        padding-top: 10px;
+        padding-top: 40px;
         background-color: #333;
         color:white;
     }
+    
+.content2 {
+        margin-top: 350px; /* Adjust this value based on the height of the top menu */
+    	padding: 20px;
+    }
+    
 
 
 
     
+
 
 
 
