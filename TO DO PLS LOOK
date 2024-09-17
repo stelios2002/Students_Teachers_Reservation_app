@@ -1,5 +1,5 @@
 1) Show Professors για το φοιτητή (βλέπει τις κενές θυρίδες διαθεσιμότητας του καθηγητή)
-
+2) Delete Reservation απο τον φοιτητη
 
 Αφού γίνουν τα παραπάνω
 3) Να φτιαχτεί το Reservation.jsp με αντιστοίχιση professor-date-time και το ίδιο και στο editReservation.jsp
