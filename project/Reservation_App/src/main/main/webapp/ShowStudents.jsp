@@ -2,8 +2,8 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="ReservationModule.users.models.Professor" %>
-<%@ include file="topMenuStudent.jsp" %>
+<%@ page import="ReservationModule.users.models.Student" %>
+<%@ include file="topMenuProfessor.jsp" %>
 <html>
 <head>
 <meta charset="ISO-8859-1">
@@ -39,9 +39,6 @@
 	            padding: 5px 10px;
 	            cursor: pointer;
           }
-          a {
-               color:white;
-            }
 </style>
 </head>
 <body>
@@ -53,29 +50,33 @@
         if (username != null) {
     %>
     <div class="content">
-        <h1>Professors of <%= username %></h1>
+        <h1>Students</h1>
         <table>
             <tr>
-                <th>Professor ID</th>
+                <th>Student ID</th>
                 <th>Username</th>
                 <th>Department</th>
                 <th>School</th>
                 <th>Specialty</th>
-                
+                <th>Show Student</th>
             </tr>
             <%
-                ArrayList<Professor> professors = (ArrayList<Professor>) request.getAttribute("professors");
-                if (professors != null && !professors.isEmpty()) {
-                    for (Professor professor : professors) {
+                ArrayList<Student> students = (ArrayList<Student>) request.getAttribute("students");
+                if (students != null && !students.isEmpty()) {
+                    for (Student student : students) {
+                    	String id = student.getId();
             %>
             <tr>
-                <td><a href="AvailabilityProfessor.jsp?professorId=<%= professor.getId() %>">
-                <%= professor.getId() %></a></td>
-                <td><%= professor.getUsername() %></td>
-                <td><%= professor.getDepartment() %></td>
-                <td><%= professor.getSchool() %></td>
-                <td><%= professor.getSpecialty() %></td>
-               
+                <td><%= id %></td>
+                <td><%= student.getUsername() %></td>
+                <td><%= student.getDepartment() %></td>
+                <td><%= student.getSchool() %></td>
+                <td><%= student.getYear() %></td>
+                <td><form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    	<input type="hidden" name="action" value="selectStudent">
+                        <input type="hidden" name="studid" value="<%= id %>">
+                        <input type="submit" value="Show">
+                    </form></td>
             </tr>
            
             <%
@@ -87,7 +88,7 @@
     <%
         } else {
     %>
-    <p>Please <a href="LoginPage.jsp">login</a>.</p>
+    <p>Please <a href="login.jsp">login</a>.</p>
     <%
         }
          	}

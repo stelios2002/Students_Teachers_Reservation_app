@@ -8,13 +8,14 @@
 <title>Registration Page</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
 
+
 </head>
 <body>
 
 
 <div class="contentRegister">
-<form id="register-form" class="register-form" autocomplete="off" action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
-<input type="hidden" name="action" value="registerProfessor" />
+<form id="register-form" class="register-form" autocomplete="off" action="<%=request.getContextPath()%>/StudentServlet" method="post">
+<input type="hidden" name="action" value="register" />
 <h1 class="a11y-hidden">Registration Form</h1>
   <input type="checkbox" name="show-password" class="show-password a11y-hidden" id="show-password" tabindex="2" />
   <label class="label-show-password" for="show-password">
@@ -22,7 +23,7 @@
   </label>
   <div>
     <label class="label-id">
-      <input type="text" class="text" name="id" placeholder="Professor Id" tabindex="4" required />
+      <input type="text" class="text" name="id" placeholder="Student Id" tabindex="4" required />
       <span class="required">Personal Id</span>
     </label>
   </div>
@@ -52,8 +53,8 @@
   </div>
   <div>
     <label class="label-year">
-      <input type="text" class="text" name="specialty" placeholder="Specialty" tabindex="5" required />
-      <span class="required">Specialty</span>
+      <input type="number" class="text" name="year" placeholder="Year" tabindex="5" required />
+      <span class="required">Year</span>
     </label>
   </div>
   <div>
@@ -74,7 +75,7 @@
   
   
   </form>
- 
+  
 
   <br>
   </div>
