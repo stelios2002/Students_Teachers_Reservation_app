@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import ReservationModule.users.models.Professor;
 
@@ -12,11 +14,13 @@ public class AvailabilityDao {
 
 	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
-	private String jdbcPassword = "L1ok3y20";
+	private String jdbcPassword = "root";
 
 	private static final String INSERT_PDA_SQL = "INSERT INTO availability (profid, time, day, is_available) VALUES (?, ?, ?, ?)"; //Prof,Day,Avail
 	private static final String IS_REGISTERED_PDA_SQL = "SELECT * FROM availability WHERE profid=? AND day=?"; //Prof,Day,Avail
     private static final String EDIT_PDA_SQL = "UPDATE availability SET is_available = ? WHERE profid = ? AND day=? AND time = ?;"; //Prof,Day,Avail
+    private static final String GET_PDA_SQL = "SELECT timeslot, is_available FROM availability WHERE profid = ? AND day = ?";
+    private static final String GET_AVAILABILITY_SQL = "SELECT day, time, is_available FROM availability WHERE profid = ?";
 	
 	
 	protected Connection getConnection() {
@@ -117,4 +121,72 @@ public class AvailabilityDao {
 		}
 		
 	}
+	
+	public boolean[] getAvailability(String day, Professor professor) {
+	    boolean[] timeslots = new boolean[16]; // 16 time slots for each day
+	    try (Connection connection = getConnection();
+	         PreparedStatement preparedStatement = connection.prepareStatement(GET_PDA_SQL)) {
+
+	        // Convert day name to day number
+	        int d = 1;
+	        if (day.equalsIgnoreCase("Tuesday")) {
+	            d = 2;
+	        } else if (day.equalsIgnoreCase("Wednesday")) {
+	            d = 3;
+	        } else if (day.equalsIgnoreCase("Thursday")) {
+	            d = 4;
+	        } else if (day.equalsIgnoreCase("Friday")) {
+	            d = 5;
+	        }
+
+	        preparedStatement.setString(1, professor.getId());
+	        preparedStatement.setInt(2, d);
+
+	        try (ResultSet rs = preparedStatement.executeQuery()) {
+	            while (rs.next()) {
+	                int timeslot = rs.getInt("timeslot"); // Slot number (0-15)
+	                int isAvailable = rs.getInt("is_available"); // Availability (1 or 0)
+	                timeslots[timeslot] = isAvailable == 1; // Store as true or false in timeslot array
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return timeslots; // Return the availability for the given day and professor
+	}
+	
+	public Map<Integer, boolean[]> getAvailabilityForProfessor(String professorId) {
+	    Map<Integer, boolean[]> availabilityMap = new HashMap<>();
+	    try (Connection connection = getConnection();
+	         PreparedStatement preparedStatement = connection.prepareStatement(GET_AVAILABILITY_SQL)) {
+
+	        preparedStatement.setString(1, professorId);
+	        
+	        try (ResultSet rs = preparedStatement.executeQuery()) {
+	            while (rs.next()) {
+	                int day = rs.getInt("day");
+	                int timeslot = rs.getInt("time");
+	                boolean isAvailable = rs.getInt("is_available") == 1;
+
+	                boolean[] timeslots = availabilityMap.computeIfAbsent(day, k -> new boolean[16]);
+	                timeslots[timeslot] = isAvailable;
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return availabilityMap;
+	}
+	
+	public static String getTimeSlotDisplay(int slot) {
+	    int hour = 10 + slot / 2; // Starts from 10 AM, assuming each slot is 30 minutes
+	    int minute = (slot % 2) * 30; // Alternates between 00 and 30 minutes
+	    return String.format("%02d:%02d", hour, minute); // Return formatted time as HH:MM
+	}
+
+
+	
+	
 }
