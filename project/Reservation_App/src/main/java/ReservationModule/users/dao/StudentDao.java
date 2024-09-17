@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import ReservationModule.users.models.Student;
 import ReservationModule.utils.dao.ReservationDao;
@@ -20,6 +21,7 @@ public class StudentDao {
 	private static final String LOGIN_STUDENT_SQL = "SELECT * FROM student WHERE username = ?;";
 	private static final String ID_STUDENT_SQL = "SELECT * FROM student WHERE id = ?;";
     private static final String DELETE_STUDENT_SQL = "DELETE FROM student WHERE id = ?;";
+    private static final String GET_USERS_SQL = "SELECT * FROM user WHERE role = 2;";
 
 	protected Connection getConnection() {
         Connection connection = null;
@@ -67,7 +69,20 @@ public class StudentDao {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public ArrayList<Student> getStudents() throws SQLException{
+		try (Connection connection = getConnection();
+		    PreparedStatement userStatement = connection.prepareStatement(GET_USERS_SQL)){
+			ArrayList<Student> students = new ArrayList<Student>();
+			try (ResultSet rsu = userStatement.executeQuery()) { 
+				while (rsu.next()) {
+					students.add(getStudent(rsu.getString("username")));
+				}
+				return students;
+			}
+		}
+	}
+	
 	public Student getStudent(String username) {
 		try (Connection connection = getConnection();
 		         PreparedStatement userStatement = connection.prepareStatement(LOGIN_USER_SQL);
@@ -133,13 +148,13 @@ public class StudentDao {
 	                        
 	                        return new Student(uname, password, name, surname, role, dept, school, year, id);
 	                    } else {
-		    				System.out.println("No professor found with the provided username.");
+		    				System.out.println("No Student found with the provided id.");
 	                        return null;
 		    			}
 		    		}
                } else {
                    // Handle case where no results are found in professor query
-                   System.out.println("No professor found with the provided username.");
+                   System.out.println("No user found with the provided id.");
                    return null;
                }
 		    }
