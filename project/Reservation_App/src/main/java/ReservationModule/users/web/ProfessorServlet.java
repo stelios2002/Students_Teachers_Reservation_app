@@ -195,10 +195,12 @@ public class ProfessorServlet extends HttpServlet {
     
     private void showUnacceptedReservations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	HttpSession session = request.getSession();
+    	List<Reservation> reservations = null;
 		if((String) session.getAttribute("username") != null) {
-			List<Reservation> reservations = reservationDao.getUnacceptedReservations(professorDao.getProfessor((String) session.getAttribute("username")).getId());
+			reservations = reservationDao.getReservationsOfProfessor(professorDao.getProfessor((String) session.getAttribute("username")).getId());
 			request.setAttribute("reservations", reservations);
 		}
+		reservations = Sorting.sort(reservations, (int) request.getAttribute("allignment"), 3);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("ProfessorMain.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -207,10 +209,12 @@ public class ProfessorServlet extends HttpServlet {
 		ReservationDao reservationDao = new ReservationDao();
 		ProfessorDao professorDao = new ProfessorDao();
 		HttpSession session = request.getSession();
+		List<Reservation> reservations = null;
 		if((String) session.getAttribute("username") != null) {
-			List<Reservation> reservations = reservationDao.getReservationsOfProfessor(professorDao.getProfessor((String) session.getAttribute("username")).getId());
+			reservations = reservationDao.getReservationsOfProfessor(professorDao.getProfessor((String) session.getAttribute("username")).getId());
 			request.setAttribute("reservations", reservations);
 		}
+		reservations = Sorting.sort(reservations, (int) request.getAttribute("allignment"), 3);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("AcceptedReservations.jsp");
 		dispatcher.forward(request, response);
 	}
