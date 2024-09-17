@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -9,6 +10,56 @@
 <meta charset="ISO-8859-1">
 <title>Student Page</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
+<style>
+
+	 	    h1 {
+	 	 	  text-align: center;
+	 	 	  font-size:20px;
+	 	    }
+	 		table {
+	            width: 100%;
+	            border-collapse: collapse;
+	        }
+	        th {
+	        
+	        	background-color:black;
+	            color:white;
+	            
+	        }
+	        td {
+	        
+	        	background-color:#333;
+	            color:white;
+	        }
+	        th, td {
+	            border: 1px solid white;
+	            padding: 10px;
+	            text-align: left;
+	            
+	        }
+	        button {
+	            padding: 5px 10px;
+	            cursor: pointer;
+            }
+            .sortButton {
+            	background: none;
+				color: inherit;
+				border: none;
+				padding: 0;
+				font: inherit;
+				cursor: pointer;
+				outline: inherit;
+            }
+            form {
+            	background: none;
+				color: inherit;
+				border: none;
+				padding: 0;
+				font: inherit;
+				cursor: pointer;
+				outline: inherit;
+            }
+</style>
 </head>
 <body>
 <div class="content">
@@ -21,12 +72,11 @@
         <h1>Reservations of <%= username %></h1>
         <table>
             <tr>
-                <th>Professor ID</th>
-                <th>Date</th>
-                <th>Time</th>
+                <th><form action="<%=request.getContextPath()%>/StudentServlet" method="post"><button value="1" name="alignment" class="sortButton">Professor Id</button></form></th>
+                <th colspan=2><form action="<%=request.getContextPath()%>/StudentServlet" method="post"><button value="3" name="alignment" class="sortButton">Date / Time</button></form></th>
                 <th>Room</th>
                 <th>Accepted</th>
-                <th>Priority</th>
+                <th><form action="<%=request.getContextPath()%>/StudentServlet" method="post"><button value="2" name="alignment" class="sortButton">Priority</button></form></th>
                 <th>Comment</th>
             </tr>
             <%

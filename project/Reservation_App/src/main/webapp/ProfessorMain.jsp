@@ -11,6 +11,7 @@
 <title>Professor Page</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
 <style>
+
 	 	    h1 {
 	 	 	  text-align: center;
 	 	 	  font-size:20px;
@@ -40,6 +41,24 @@
 	            padding: 5px 10px;
 	            cursor: pointer;
             }
+            .sortButton {
+            	background: none;
+				color: inherit;
+				border: none;
+				padding: 0;
+				font: inherit;
+				cursor: pointer;
+				outline: inherit;
+            }
+            form {
+            	background: none;
+				color: inherit;
+				border: none;
+				padding: 0;
+				font: inherit;
+				cursor: pointer;
+				outline: inherit;
+            }
 </style>
 </head>
 <body>
@@ -53,11 +72,10 @@
         <h1> Unaccepted Reservations of <%= username %></h1>
         <table>
             <tr>
-                <th>Student Id</th>
-                <th>Date</th>
-                <th>Time</th>
+                <th><form action="<%=request.getContextPath()%>/ProfessorServlet" method="post"><button value="1" name="alignment" class="sortButton">Student Id</button></form></th>
+                <th colspan=2><form action="<%=request.getContextPath()%>/ProfessorServlet" method="post"><button value="3" name="alignment" class="sortButton">Date / Time</button></form></th>
                 <th>Room</th>
-                <th>Priority</th>
+                <th><form action="<%=request.getContextPath()%>/StudentServlet" method="post"><button value="2" name="alignment" class="sortButton">Priority</button></form></th>
                 <th>Comment</th>
                 <th>Actions</th>
             </tr>
