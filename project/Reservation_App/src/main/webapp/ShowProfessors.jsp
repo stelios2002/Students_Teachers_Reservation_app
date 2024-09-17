@@ -10,11 +10,11 @@
 <title>Student Page</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
 <style>
- 	 h1 {
- 	 	text-align: center;
- 	 	font-size:20px;
- 	  }
-	 table {
+	 	    h1 {
+	 	 	  text-align: center;
+	 	 	  font-size:20px;
+	 	    }
+	 		table {
 	            width: 100%;
 	            border-collapse: collapse;
 	        }
@@ -38,7 +38,10 @@
 	        button {
 	            padding: 5px 10px;
 	            cursor: pointer;
-          }
+            }
+            a {
+               color:white;
+            }
 </style>
 </head>
 <body>
@@ -58,7 +61,6 @@
                 <th>Department</th>
                 <th>School</th>
                 <th>Specialty</th>
-                
             </tr>
             <%
                 ArrayList<Professor> professors = (ArrayList<Professor>) request.getAttribute("professors");
@@ -66,12 +68,11 @@
                     for (Professor professor : professors) {
             %>
             <tr>
-                <td><%= professor.getId() %></td>
+                <td><a href="AvailabilityProfessor.jsp?professorId=<%= professor.getId() %>"><%= professor.getId() %></a></td>
                 <td><%= professor.getUsername() %></td>
                 <td><%= professor.getDepartment() %></td>
                 <td><%= professor.getSchool() %></td>
                 <td><%= professor.getSpecialty() %></td>
-               
             </tr>
            
             <%
@@ -83,7 +84,7 @@
     <%
         } else {
     %>
-    <p>Please <a href="login.jsp">login</a>.</p>
+    <p>Please <a href="LoginPage.jsp">login</a>.</p>
     <%
         }
          	}
