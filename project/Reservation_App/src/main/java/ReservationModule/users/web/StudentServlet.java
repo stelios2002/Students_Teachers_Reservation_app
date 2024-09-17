@@ -52,9 +52,8 @@ public class StudentServlet extends HttpServlet {
 	                case "Reservations":
 	                	showReservations(request, response);
 	                    break;
-	              
 	                case "Info Providing":
-	                	showReservations(request, response);
+	                	showInfo(request, response);
 	                    break;
 	                case "commitReservation":
 	                	commitReservation(request, response);
@@ -78,6 +77,11 @@ public class StudentServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+	 }
+	 
+	 private void showInfo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 	RequestDispatcher dispatcher = request.getRequestDispatcher("InfoProvidingStudent.jsp");
+			dispatcher.forward(request, response);
 	 }
 	 
 	private void showAvailableDates(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

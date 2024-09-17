@@ -67,7 +67,7 @@ public class ProfessorServlet extends HttpServlet {
                     	showStudents(request, response);
                     	break;
                     case "Info Providing":
-                    	showUnacceptedReservations(request, response);
+                    	showInfo(request, response);
                     	break;
                     case "Confirm":
                     	editReservation(request, response);
@@ -89,7 +89,11 @@ public class ProfessorServlet extends HttpServlet {
                 throw new ServletException(e);
             }
     }
-	
+	private void showInfo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 	RequestDispatcher dispatcher = request.getRequestDispatcher("InfoProvidingProfessor.jsp");
+			dispatcher.forward(request, response);
+	 }
+
 	private void showStudents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
 		StudentDao studentDao = new StudentDao();
 		HttpSession session = request.getSession();
