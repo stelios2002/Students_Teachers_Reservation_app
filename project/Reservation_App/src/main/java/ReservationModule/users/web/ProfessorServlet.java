@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -15,10 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ReservationModule.users.dao.ProfessorDao;
+import ReservationModule.users.dao.StudentDao;
 import ReservationModule.utils.dao.AvailabilityDao;
 import ReservationModule.utils.dao.ReservationDao;
 import ReservationModule.utils.models.Reservation;
 import ReservationModule.users.models.Professor;
+import ReservationModule.users.models.Student;
 import ReservationModule.users.dao.Ipassword;
 
 
@@ -60,8 +63,8 @@ public class ProfessorServlet extends HttpServlet {
                     case "Confirm Reservations":
                     	showUnacceptedReservations(request, response);
                     	break;
-                    case "Search Student":
-                    	showUnacceptedReservations(request, response);
+                    case "Show Students":
+                    	showStudents(request, response);
                     	break;
                     case "Info Providing":
                     	showUnacceptedReservations(request, response);
@@ -75,6 +78,9 @@ public class ProfessorServlet extends HttpServlet {
                     case "Set Availability":
                     	goToAvailability(request, response);
                     	break;
+                    case "selectStudent":
+                    	selectedStudent(request, response);
+                    	break;
                     default:
                         response.sendRedirect("index.jsp");
                         break;
@@ -83,11 +89,33 @@ public class ProfessorServlet extends HttpServlet {
                 throw new ServletException(e);
             }
     }
-
-	 private void goToAvailability(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    	RequestDispatcher dispatcher = request.getRequestDispatcher("SetAvailability.jsp");
-			dispatcher.forward(request, response);
+	
+	private void showStudents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+		StudentDao studentDao = new StudentDao();
+		HttpSession session = request.getSession();
+		if((String) session.getAttribute("username") != null) {
+			ArrayList<Student> students = studentDao.getStudents();
+			request.setAttribute("students", students);
 		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("ShowStudents.jsp");
+		dispatcher.forward(request, response);
+	}
+	
+	private void selectedStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+		//take the id etc of the student and forward them
+		String studid = request.getParameter("studid");
+		System.out.println(studid);
+		StudentDao sd = new StudentDao();
+		Student s = sd.getStudentByID(studid);
+		request.setAttribute("student", s);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("StudentJumbotron.jsp");
+		dispatcher.forward(request, response);
+	}
+	
+	private void goToAvailability(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("SetAvailability.jsp");
+		dispatcher.forward(request, response);
+	}
 
 		private void setAvailability(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 			String day = request.getParameter("dayOfWeek");
