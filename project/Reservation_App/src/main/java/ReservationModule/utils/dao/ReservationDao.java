@@ -11,13 +11,16 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ReservationModule.utils.models.Reservation;
 
 public class ReservationDao {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
-	private String jdbcPassword = "giorgos2002!";
+	private String jdbcPassword = "L1ok3y20";
 
 	private static final String ACCEPT_RESERVATIONS_SQL = "UPDATE reservations SET accepted = 1 WHERE id = ?;";
 	private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservations" 
@@ -28,7 +31,7 @@ public class ReservationDao {
 	private static final String GET_RESERVATIONS_OF_STUDENT_SQL = "SELECT * FROM reservations where studid = ?;";
     private static final String DELETE_RESERVATIONS_SQL = "DELETE FROM reservations WHERE id = ?;";
     private static final String EDIT_RESERVATIONS_SQL = "UPDATE reservations SET date = ?, time = ?, room = ?, priority = ?, comment = ? WHERE id = ?;";
-
+    private static final String AVAILABLE_DAY_PROFESSOR_SQL = "SELECT day FROM availability WHERE is_available = 1 and profid=?;";
     
     
 	protected Connection getConnection() {
@@ -268,8 +271,41 @@ public class ReservationDao {
 			e.printStackTrace();
 		}
 	}
+	
+	public List<String> getAvailableDays() {
+        List<String> availableDays = new ArrayList<>();
 
+        try (Connection connection = getConnection();
+             PreparedStatement studentStatement = connection.prepareStatement(AVAILABLE_DAY_PROFESSOR_SQL);
 
+             ResultSet rs = studentStatement.executeQuery()) {
+
+            while (rs.next()) {
+                availableDays.add(rs.getString("day"));
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return availableDays;
+   }
+
+   public Map<String, List<LocalDate>> generateAvailableDates(List<String> availableDays) {
+        Map<String, List<LocalDate>> availableDates = new HashMap<>();
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusWeeks(4);
+
+        for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
+            String dayOfWeek = date.getDayOfWeek().toString();
+
+            if (availableDays.contains(dayOfWeek)) {
+                availableDates.computeIfAbsent(dayOfWeek, k -> new ArrayList<>()).add(date);
+            }
+        }
+
+        return availableDates;
+    }
+	
 	public boolean checkAvailability(String reservationId) {
 		Reservation r1 = getReservation(reservationId);
 		if (r1!=null) {

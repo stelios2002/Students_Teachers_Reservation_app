@@ -2,8 +2,6 @@ package ReservationModule.users.web;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,15 +17,12 @@ import ReservationModule.users.dao.UserDao;
 import ReservationModule.users.models.Admin;
 import ReservationModule.users.models.Professor;
 import ReservationModule.users.models.Student;
-import ReservationModule.utils.dao.ReservationDao;
-import ReservationModule.utils.models.Reservation;
 
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private AdminDao adminDao = new AdminDao();
 	private StudentDao studentDao = new StudentDao();
 	private ProfessorDao professorDao = new ProfessorDao();
-	private ReservationDao reservationDao = new ReservationDao();
 	private UserDao userDao = new UserDao();
 	
 
@@ -57,21 +52,12 @@ public class AdminServlet extends HttpServlet {
 			case "/delete_user":
 				deleteUser(request, response);
 				break;
-			case "/delete_reservation":
-				deleteReservation(request, response);
-				break;
-			case "/show_reservations":
-				showReservations(request, response);
-				break;
 			default:
 				//listUser(request, response);
 				break;
 			}
 		} catch (SQLException ex) {
 			throw new ServletException(ex);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -129,20 +115,4 @@ public class AdminServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("AdminMain.jsp");
 	    dispatcher.forward(request, response);
 	}
-	
-	private void showReservations(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException, ServletException {
-		ArrayList<Reservation> programs = reservationDao.getReservations();
-	    request.setAttribute("programs", programs);
-	    request.getRequestDispatcher("/ShowReservations.jsp").forward(request, response);
-	}
-	
-	private void deleteReservation(HttpServletRequest request, HttpServletResponse response) 
-			throws SQLException, IOException {
-		String id = request.getParameter("id");
-		reservationDao.deleteReservation(id);
-		response.sendRedirect("ShowReservations.jsp");
-	}
-	
-	
-
 }

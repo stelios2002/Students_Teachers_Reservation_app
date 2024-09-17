@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
@@ -80,29 +79,12 @@ public class StudentServlet extends HttpServlet {
 	 }
 	 
 	 private void showInfo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 	RequestDispatcher dispatcher = request.getRequestDispatcher("InfoProvidingStudent.jsp");
+		 	RequestDispatcher dispatcher = request.getRequestDispatcher("InfoProvidingProfessor.jsp");
 			dispatcher.forward(request, response);
 	 }
-	 
-	private void showAvailableDates(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		   ReservationDao reservationDao = new ReservationDao();
-	       List<String> availableDays = reservationDao.getAvailableDays();
-	        
-	        // Generate dates for the available days
-	        
-	        Map<String, List<LocalDate>> availableDates = reservationDao.generateAvailableDates(availableDays);
-	        
-	        // Set the data in the request scope
-	        request.setAttribute("availableDates", availableDates);
-	        
-	        // Forward to JSP
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("Reservation.jsp");
-			dispatcher.forward(request, response);
-	}
 	
 	private void showProfessors(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
 		ProfessorDao professorDao = new ProfessorDao();
-		StudentDao studentDao = new StudentDao();
 		HttpSession session = request.getSession();
 		if((String) session.getAttribute("username") != null) {
 			ArrayList<Professor> professors = professorDao.getProfessors();
@@ -120,7 +102,9 @@ public class StudentServlet extends HttpServlet {
 			if((String) session.getAttribute("username") != null) {
 				reservations = reservationDao.getReservationsOfStudent(studentDao.getStudent((String) session.getAttribute("username")).getId());
 			}
-			reservations = Sorting.sort(reservations, (int) request.getAttribute("allignment"), 2);
+			if(request.getParameter("alignment") != null) {
+				reservations = Sorting.sort(reservations, Integer.parseInt(request.getParameter("alignment")), 2);
+			}
 			request.setAttribute("reservations", reservations);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("StudentMain.jsp");
 			dispatcher.forward(request, response);

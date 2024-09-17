@@ -89,10 +89,11 @@ public class ProfessorServlet extends HttpServlet {
                 throw new ServletException(e);
             }
     }
+	
 	private void showInfo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 	RequestDispatcher dispatcher = request.getRequestDispatcher("InfoProvidingProfessor.jsp");
-			dispatcher.forward(request, response);
-	 }
+	 	RequestDispatcher dispatcher = request.getRequestDispatcher("InfoProvidingProfessor.jsp");
+		dispatcher.forward(request, response);
+	}
 
 	private void showStudents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
 		StudentDao studentDao = new StudentDao();
@@ -197,10 +198,12 @@ public class ProfessorServlet extends HttpServlet {
     	HttpSession session = request.getSession();
     	List<Reservation> reservations = null;
 		if((String) session.getAttribute("username") != null) {
-			reservations = reservationDao.getReservationsOfProfessor(professorDao.getProfessor((String) session.getAttribute("username")).getId());
+			reservations = reservationDao.getUnacceptedReservations(professorDao.getProfessor((String) session.getAttribute("username")).getId());
 			request.setAttribute("reservations", reservations);
 		}
-		reservations = Sorting.sort(reservations, (int) request.getAttribute("allignment"), 3);
+		if(request.getParameter("alignment") != null) {
+			reservations = Sorting.sort(reservations, Integer.parseInt(request.getParameter("alignment")), 3);
+		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher("ProfessorMain.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -214,7 +217,9 @@ public class ProfessorServlet extends HttpServlet {
 			reservations = reservationDao.getReservationsOfProfessor(professorDao.getProfessor((String) session.getAttribute("username")).getId());
 			request.setAttribute("reservations", reservations);
 		}
-		reservations = Sorting.sort(reservations, (int) request.getAttribute("allignment"), 3);
+		if(request.getParameter("alignment") != null) {
+			reservations = Sorting.sort(reservations, Integer.parseInt(request.getParameter("alignment")), 3);
+		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher("AcceptedReservations.jsp");
 		dispatcher.forward(request, response);
 	}

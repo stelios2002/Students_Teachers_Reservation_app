@@ -14,7 +14,7 @@ public class AvailabilityDao {
 
 	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
-	private String jdbcPassword = "root";
+	private String jdbcPassword = "L1ok3y20";
 
 	private static final String INSERT_PDA_SQL = "INSERT INTO availability (profid, time, day, is_available) VALUES (?, ?, ?, ?)"; //Prof,Day,Avail
 	private static final String IS_REGISTERED_PDA_SQL = "SELECT * FROM availability WHERE profid=? AND day=?"; //Prof,Day,Avail
@@ -43,13 +43,13 @@ public class AvailabilityDao {
 				PreparedStatement regStatement = connection.prepareStatement(IS_REGISTERED_PDA_SQL);){
 			regStatement.setString(1, professor.getId());
 			int d = 1;
-			if(day == "Tuesday") {
+			if(day.equals("Tuesday")) {
 				d = 2;
-			} else if (day == "Wednesday") {
+			} else if (day.equals("Wednesday")) {
 				d = 3;
-			} else if (day == "Thursday") {
+			} else if (day.equals("Thursday")) {
 				d = 4;
-			} else if (day == "Friday") {
+			} else if (day.equals("Friday")) {
 				d = 5;
 			}
 			regStatement.setInt(2, d);
@@ -71,19 +71,18 @@ public class AvailabilityDao {
 					preparedStatement.setBoolean(1, true);
 				}
 				int d = 1;
-				if(day == "Tuesday") {
+				if(day.equals("Tuesday")) {
 					d = 2;
-				} else if (day == "Wednesday") {
+				} else if (day.equals("Wednesday")) {
 					d = 3;
-				} else if (day == "Thursday") {
+				} else if (day.equals("Thursday")) {
 					d = 4;
-				} else if (day == "Friday") {
+				} else if (day.equals("Friday")) {
 					d = 5;
 				}
 				preparedStatement.setString(2, professor.getId());
 				preparedStatement.setInt(3, d);
 				preparedStatement.setInt(4, i);
-				System.out.println(preparedStatement);
 				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
@@ -101,19 +100,18 @@ public class AvailabilityDao {
 					preparedStatement.setBoolean(4, true);
 				}
 				int d = 1;
-				if(day == "Tuesday") {
+				if(day.equals("Tuesday")) {
 					d = 2;
-				} else if (day == "Wednesday") {
+				} else if (day.equals("Wednesday")) {
 					d = 3;
-				} else if (day == "Thursday") {
+				} else if (day.equals("Thursday")) {
 					d = 4;
-				} else if (day == "Friday") {
+				} else if (day.equals("Friday")) {
 					d = 5;
 				}
 				preparedStatement.setString(1, professor.getId());
 				preparedStatement.setInt(3, d);
 				preparedStatement.setInt(2, i);
-				System.out.println(preparedStatement);
 				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {

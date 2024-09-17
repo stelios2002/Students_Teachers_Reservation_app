@@ -13,7 +13,7 @@ import ReservationModule.utils.dao.ReservationDao;
 public class ProfessorDao {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/reservationdb";
 	private String jdbcUsername = "root";
-	private String jdbcPassword = "root";
+	private String jdbcPassword = "L1ok3y20";
 
 	private static final String INSERT_USER_SQL = "INSERT INTO user (username, password, first_name, surname, role) VALUES (?, ?, ?, ?, ?)";
 	private static final String INSERT_PROFESSOR_SQL = "INSERT INTO professor (username, department, school, specialty, id) VALUES (?, ?, ?, ?, ?)";
@@ -65,7 +65,6 @@ public class ProfessorDao {
 		}
 	}
 	public ArrayList<Professor> getProfessors() throws SQLException {
-		
 		try (Connection connection = getConnection();
 		    PreparedStatement userStatement = connection.prepareStatement(GET_USERS_SQL)){
 			ArrayList<Professor> professors = new ArrayList<Professor>();
@@ -76,10 +75,7 @@ public class ProfessorDao {
 				}
 				return professors;
 			}
-			
 		}
-		         
-		
 	}
 
 	public Professor getProfessor(String username) {

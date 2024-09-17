@@ -17,5 +17,4 @@ public interface Ipassword {
 	            throw new RuntimeException(e);
 	        }
 	    }
-
 }
