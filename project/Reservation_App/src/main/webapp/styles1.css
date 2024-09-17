@@ -1,3 +1,4 @@
+
 html, body {
   align-items: center;
   background: #dee2e6;
@@ -250,6 +251,30 @@ input[type="checkbox"]:checked + label span::after {
 .priority-five {
     background-color: green;
     color: white;
+}
+
+.buttonForm {
+	background-color: #333;
+	display:inline;
+	border:none;	
+}
+
+.buttonForm2 {
+	background-color: #333;
+	display:inline;
+	border:none;
+}
+
+.updateB {
+	border:none;
+}
+
+.deleteB {
+	border:none;
+}
+
+.acceptB {
+	border:none;
 }
 
 
