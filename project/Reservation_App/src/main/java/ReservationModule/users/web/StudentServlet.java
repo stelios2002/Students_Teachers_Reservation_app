@@ -79,7 +79,7 @@ public class StudentServlet extends HttpServlet {
 	 }
 	 
 	 private void showInfo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 	RequestDispatcher dispatcher = request.getRequestDispatcher("InfoProvidingProfessor.jsp");
+		 	RequestDispatcher dispatcher = request.getRequestDispatcher("InfoProvidingStudent.jsp");
 			dispatcher.forward(request, response);
 	 }
 	
@@ -155,10 +155,10 @@ public class StudentServlet extends HttpServlet {
 	 }
 	 
 	 
-	 private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-			String id = request.getParameter("id");
-			reservationDao.deleteReservationsOfStudent(id);
-			response.sendRedirect("StudentMain.jsp");
+	 private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+		 	String id = request.getParameter("reservationId");
+			reservationDao.deleteReservation(id);
+			showReservations(request, response);
 	 }
 	 
 	 
