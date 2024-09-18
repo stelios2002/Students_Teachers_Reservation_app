@@ -13,7 +13,29 @@
 	 	    h1 {
 	 	 	  text-align: center;
 	 	 	  font-size:20px;
-	@@ -40,6 +41,24 @@
+	 	    }
+	 		table {
+	            width: 100%;
+	            border-collapse: collapse;
+	        }
+	        th {
+	        
+	        	background-color:black;
+	            color:white;
+	            
+	        }
+	        td {
+	        
+	        	background-color:#333;
+	            color:white;
+	        }
+	        th, td {
+	            border: 1px solid white;
+	            padding: 10px;
+	            text-align: left;
+	            
+	        }
+	        button {
 	            padding: 5px 10px;
 	            cursor: pointer;
             }
@@ -99,16 +121,16 @@
                 <td>
                 
                     <!-- Accept button -->
-                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    <form class="buttonForm" action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
                     	<input type="hidden" name="action" value="acceptReservation">
                         <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
-                        <input type="submit" value="Accept">
+                        <input class="acceptB" type="submit" value="Accept">
                     </form>
                     <!-- Delete button -->
-                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    <form class="buttonForm2" action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
                     	<input type="hidden" name="action" value="deleteReservation">
                         <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
-                        <input type="submit" value="Delete">
+                        <input class="deleteB" type="submit" value="Delete">
                     </form>
                 </td>
             </tr>
