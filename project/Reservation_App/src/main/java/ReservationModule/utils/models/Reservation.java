@@ -28,14 +28,17 @@ public class Reservation{
     }
     public int getRoom() {
     	return room;
-    	}
-    
-	public int getPriority() {
-		return priority;
+    }
+    public int getPriority() {
+	if(priority == 0) {
+		return 6;
 	}
-	public String getComment() {
-		return comment;
-	}
+        return priority;
+     }
+
+     public String getComment() {
+	return comment;
+     }
 	
     public void setStudent(String student){
         this.student = student;
