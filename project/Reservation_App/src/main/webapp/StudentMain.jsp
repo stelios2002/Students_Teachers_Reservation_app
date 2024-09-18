@@ -90,6 +90,7 @@
                 <th>Action</th>
             </tr>
             <%
+        		@SuppressWarnings("unchecked")
                 List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
                 if (reservations != null && !reservations.isEmpty()) {
                     for (Reservation reservation : reservations) {

@@ -20,6 +20,11 @@
 	            color:white;
 	            
 	        }
+	        td {
+	        
+	        	background-color:#333;
+	            color:white;
+	        }
 	        th, td {
 	            border: 1px solid white;
 	            padding: 10px;
@@ -74,6 +79,7 @@
                 <th>Actions</th>
             </tr>
             <%
+            	@SuppressWarnings("unchecked")
                 List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
                 if (reservations != null && !reservations.isEmpty()) {
                     for (Reservation reservation : reservations) {
@@ -98,7 +104,7 @@
                                 priorityClass = "";
                         }
             %>
-            <tr class="<%= priorityClass %>">
+            <tr class="<%= priorityClass %>" style="text-align:center;">
                 <td><%= reservation.getStudent() %></td>
                 <td><%= reservation.getDate() %></td>
                 <td><%= reservation.getTime() %></td>
@@ -113,8 +119,8 @@
                         <input class="updateB" type="submit" value="Update">
                     </form>
                     <!-- Delete button -->
-                    <form class="buttonForm2 action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
-                    	<input type="hidden" name="action" value="deleteReservation">
+                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                	<input type="hidden" name="action" value="deleteReservation">
                         <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
                         <input class="deleteB" type="submit" value="Delete">
                     </form>

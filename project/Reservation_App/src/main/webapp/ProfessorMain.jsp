@@ -75,6 +75,7 @@
                 <th>Actions</th>
             </tr>
           <%
+      			@SuppressWarnings("unchecked")
                 List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
                 if (reservations != null && !reservations.isEmpty()) {
                     for (Reservation reservation : reservations) {
@@ -99,7 +100,7 @@
                                 priorityClass = "";
                         }
             %>
-            <tr class="<%= priorityClass %>">
+            <tr class="<%= priorityClass %>" style="text-align:center;">
                 <td><%= reservation.getStudent() %></td>
                 <td><%= reservation.getDate() %></td>
                 <td><%= reservation.getTime() %></td>

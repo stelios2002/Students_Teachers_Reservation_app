@@ -61,6 +61,7 @@
                 <th>Show Student</th>
             </tr>
             <%
+        		@SuppressWarnings("unchecked")
                 ArrayList<Student> students = (ArrayList<Student>) request.getAttribute("students");
                 if (students != null && !students.isEmpty()) {
                     for (Student student : students) {

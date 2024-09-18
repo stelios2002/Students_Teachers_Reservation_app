@@ -64,6 +64,7 @@
                 
             </tr>
             <%
+        		@SuppressWarnings("unchecked")
                 ArrayList<Professor> professors = (ArrayList<Professor>) request.getAttribute("professors");
                 if (professors != null && !professors.isEmpty()) {
                     for (Professor professor : professors) {
