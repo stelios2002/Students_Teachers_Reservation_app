@@ -87,6 +87,7 @@
                 </form>
                 </th>
                 <th>Comment</th>
+                <th>Action</th>
             </tr>
             <%
                 List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
@@ -113,7 +114,7 @@
                                 priorityClass = "";
                         }
             %>
-            <tr class="<%= priorityClass %>">
+            <tr class="<%= priorityClass %>" style="text-align:center;">
                 <td><%= reservation.getProfessor() %></td>
                 <td><%= reservation.getDate() %></td>
                 <td><%= reservation.getTime() %></td>
@@ -121,6 +122,13 @@
                 <td><%= reservation.isAccepted() ? "yes" : "no" %></td>
                 <td><%= reservation.getPriority() %></td>
                 <td><%= reservation.getComment() %></td>
+                <td>
+				<form class="buttonForm2" action="<%=request.getContextPath()%>/StudentServlet" method="post" style="display:inline;">
+					<input type="hidden" name="action" value="deleteReservation">
+					<input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
+					<input class="deleteB" type="submit" value="Delete">
+				</form>
+				</td>
             </tr>
             <%
                     }
