@@ -129,12 +129,15 @@ public class ProfessorServlet extends HttpServlet {
 					false, false, false, false,
 					false, false, false, false};
 			String[] Selected = request.getParameterValues("timeSlots");
-			int[] s = new int[Selected.length];
-			for (int i = 0; i< Selected.length; i++) {
-				s[i] = Integer.parseInt(Selected[i]);
-			}
-			for (int i : s) {
-				timeslots[i] = true;
+			int[] s = null;
+			if(Selected != null) {
+				s = new int[Selected.length];
+				for (int i = 0; i< Selected.length; i++) {
+					s[i] = Integer.parseInt(Selected[i]);
+				}
+				for (int i : s) {
+					timeslots[i] = true;
+				}
 			}
 			Professor professor;
 			HttpSession session = request.getSession();
