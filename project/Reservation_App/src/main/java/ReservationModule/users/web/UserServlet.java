@@ -42,10 +42,6 @@ public class UserServlet extends HttpServlet {
 			case "Logout":
 				logout(request, response);
 				break;	
-			
-			case "UserDelete":
-				deleteUser(request,response);
-				break;
 			default:
 				RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 			    dispatcher.forward(request, response);
@@ -81,11 +77,6 @@ public class UserServlet extends HttpServlet {
 			request.setAttribute("reservations", reservations);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("ProfessorMain.jsp");
 			dispatcher.forward(request, response);
-		} else if (role == 1) {
-			HttpSession session = request.getSession();
-			session.setAttribute("username", username);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("AdminMain.jsp");
-			dispatcher.forward(request, response);
 		} else if (role == -1){
 			HttpSession session = request.getSession();
 			session.setAttribute("error", "Invalid username");
@@ -109,14 +100,4 @@ public class UserServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		dispatcher.forward(request, response);
 	}
-	
-	private void deleteUser(HttpServletRequest request, HttpServletResponse response) 
-	        throws SQLException, IOException, ServletException {
-	    String username = request.getParameter("username");
-	    userDao.deleteUser(username);
-	    RequestDispatcher dispatcher = request.getRequestDispatcher("adminMain.jsp");
-	    dispatcher.forward(request, response);
-	}
-	
-	// Add more methods as needed
 }
