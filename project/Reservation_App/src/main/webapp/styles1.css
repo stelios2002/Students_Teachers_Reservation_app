@@ -1,3 +1,4 @@
+
 html, body {
   align-items: center;
   background: #dee2e6;
@@ -218,12 +219,13 @@ input[type="checkbox"]:checked + label span::after {
         padding-top: 40px;
         background-color: #333;
         color:white;
-}
+    }
     
 .content2 {
         margin-top: 350px; /* Adjust this value based on the height of the top menu */
     	padding: 20px;
-}
+    }
+    
     
 .priority-one {
     background-color: red;
@@ -244,6 +246,7 @@ input[type="checkbox"]:checked + label span::after {
     background-color: cyan;
     color: black;
 }
+
     
 .priority-five {
     background-color: green;
@@ -304,3 +307,7 @@ input[type="checkbox"]:checked + label span::after {
         .btn:hover {
             background-color: #0056b3;
         }
+
+
+
+

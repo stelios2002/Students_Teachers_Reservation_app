@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -14,10 +15,10 @@
  	 	text-align: center;
  	 	font-size:20px;
  	  }
-	 table {
-	            width: 100%;
-	            border-collapse: collapse;
-	        }
+		 table {
+		            width: 100%;
+		            border-collapse: collapse;
+		        }
 	        th {
 	        
 	        	background-color:black;
@@ -35,14 +36,20 @@
 	            text-align: left;
 	            
 	        }
-	        button {
-	            padding: 5px 10px;
-	            cursor: pointer;
-          }
+	        
+            form {
+            	background: none;
+				color: inherit;
+				border: none;
+				padding: 0;
+				font: inherit;
+				cursor: pointer;
+				outline: inherit;
+             }
 </style>
 </head>
 <body>
-<div class="content">
+<div class="content2">
         <%
         
         String username = (String) session.getAttribute("username");
@@ -61,7 +68,6 @@
                 <th>Show Student</th>
             </tr>
             <%
-        		@SuppressWarnings("unchecked")
                 ArrayList<Student> students = (ArrayList<Student>) request.getAttribute("students");
                 if (students != null && !students.isEmpty()) {
                     for (Student student : students) {
@@ -76,7 +82,7 @@
                 <td><form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
                     	<input type="hidden" name="action" value="selectStudent">
                         <input type="hidden" name="studid" value="<%= id %>">
-                        <input type="submit" value="Show">
+                        <input class="acceptB" type="submit" value="Show">
                     </form></td>
             </tr>
            
@@ -89,7 +95,7 @@
     <%
         } else {
     %>
-    <p>Please <a href="login.jsp">login</a>.</p>
+    <p>Please <a href="LoginPage.jsp">login</a>.</p>
     <%
         }
          	}

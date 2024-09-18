@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -7,6 +8,17 @@
 <head>
     <title>Student Information</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
+<style>
+			form {
+            	background: none;
+				color: inherit;
+				border: none;
+				padding: 0;
+				font: inherit;
+				cursor: pointer;
+				outline: inherit;
+             }
+</style>
 </head>
 <body>
 

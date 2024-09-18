@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,20 +15,19 @@
 
 <body>
 
-<strong></strong>
-<div>
+<div style="margin-top: 100px;" class="content">
 
 <h2>Confirm Reservations</h2>
 
 <p>
 To confirm a reservation of a student, click on the <strong>"CONFRIM RESERVATIONS"</strong> button from the top menu.<br></br>
 Reservations are coloured differently based on their priority.<br></br>
-1. ΠΤΥΧΙΑΚΗ --> <strong>RED</strong><br></br>
-2. ΑΝΑΒΑΘΜΟΛΟΓΗΣΗ --> <strong>ORANGE</strong><br></br>
-3. ΜΕΤΑΠΤΥΧΙΑΚΟ --> <strong>YELLOW</strong><br></br>
-4. ERASMUS --> <strong>BLUE</strong><br></br>
-5. ΕΠΙΛΥΣΗ ΑΠΟΡΙΩΝ --> <strong>GREEN</strong><br></br>
-6. ΑΛΛΟ --> <strong>GREY</strong><br></br>
+1. ΠΤΥΧΙΑΚΗ --> <strong style="color: red;">RED</strong><br></br>
+2. ΑΝΑΒΑΘΜΟΛΟΓΗΣΗ --> <strong style="color: orange;">ORANGE</strong><br></br>
+3. ΜΕΤΑΠΤΥΧΙΑΚΟ --> <strong style="color: yellow;"">YELLOW</strong><br></br>
+4. ERASMUS --> <strong style="color: blue;">BLUE</strong><br></br>
+5. ΕΠΙΛΥΣΗ ΑΠΟΡΙΩΝ --> <strong style="color: green;">GREEN</strong><br></br>
+6. ΑΛΛΟ --> <strong style="color: grey;">GREY</strong><br></br>
 </p>
 
 

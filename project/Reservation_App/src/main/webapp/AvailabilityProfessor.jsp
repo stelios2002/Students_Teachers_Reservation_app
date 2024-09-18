@@ -49,6 +49,7 @@
     <%
         // Retrieve professorId from request attributes
         String professorId = request.getParameter("professorId");
+
         // Check if professorId is provided
         if (professorId == null || professorId.isEmpty()) {
     %>
@@ -61,6 +62,7 @@
         	AvailabilityDao dao = new AvailabilityDao();
             Map<Integer, boolean[]> availabilityMap = dao.getAvailabilityForProfessor(professorId);
      
+
         // Check if availabilityMap is available
         if (availabilityMap == null) {
     %>
@@ -68,10 +70,12 @@
     <%
             return; // Exit the JSP if availabilityMap is not available
         }
+
         // Days of the week
         String[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
     %>
-    <div class="content">
+    
+    <div class="content2">
 
     <h1>Availability for Professor ID: <%= professorId %></h1><br>
 
