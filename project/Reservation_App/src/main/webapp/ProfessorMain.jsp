@@ -10,11 +10,7 @@
 <title>Professor Page</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
 <style>
-	 	    h1 {
-	 	 	  text-align: center;
-	 	 	  font-size:20px;
-	 	    }
-	 		table {
+	 	    table {
 	            width: 100%;
 	            border-collapse: collapse;
 	        }
@@ -24,22 +20,13 @@
 	            color:white;
 	            
 	        }
-	        td {
-	        
-	        	background-color:#333;
-	            color:white;
-	        }
 	        th, td {
 	            border: 1px solid white;
 	            padding: 10px;
 	            text-align: left;
 	            
 	        }
-	        button {
-	            padding: 5px 10px;
-	            cursor: pointer;
-            }
-            .sortButton {
+	         .sortButton {
             	background: none;
 				color: inherit;
 				border: none;
@@ -48,7 +35,7 @@
 				cursor: pointer;
 				outline: inherit;
             }
-            form {
+             form {
             	background: none;
 				color: inherit;
 				border: none;
@@ -58,6 +45,7 @@
 				outline: inherit;
             }
 </style>
+
 </head>
 <body>
 <div class="content">

@@ -20,11 +20,6 @@
 	            color:white;
 	            
 	        }
-	        td {
-	        
-	        	background-color:#333;
-	            color:white;
-	        }
 	        th, td {
 	            border: 1px solid white;
 	            padding: 10px;
