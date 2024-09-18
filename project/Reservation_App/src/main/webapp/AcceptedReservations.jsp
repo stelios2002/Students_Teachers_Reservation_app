@@ -59,7 +59,7 @@
     if (username != null) {
     %>
     <div class="content">
-        <h1> Accepted Reservations of <%= username %></h1>
+        <h1 style ="text-align:center;"> Accepted Reservations of <%= username %></h1>
         <table>
             <tr>
                 <th><form action="<%=request.getContextPath()%>/ProfessorServlet" method="post">
@@ -112,16 +112,16 @@
                 <td><%= reservation.getComment() %></td>
                 <td>
                     <!-- Update button -->
-                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    <form class="buttonForm" action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
                     	<input type="hidden" name="action" value="updateReservation">
                         <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
-                        <input type="submit" value="Update">
+                        <input class="updateB" type="submit" value="Update">
                     </form>
                     <!-- Delete button -->
-                    <form action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
+                    <form class="buttonForm2 action="<%=request.getContextPath()%>/ProfessorServlet" method="post" style="display:inline;">
                     	<input type="hidden" name="action" value="deleteReservation">
                         <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
-                        <input type="submit" value="Delete">
+                        <input class="deleteB" type="submit" value="Delete">
                     </form>
                 </td>
             </tr>
