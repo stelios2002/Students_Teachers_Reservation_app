@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -11,7 +10,7 @@
 <title>Student Page</title>
 <link href="styles1.css" rel="stylesheet" type="text/css" >
 <style>
-	 	  	  h1 {
+	 	    h1 {
 	 	 	  text-align: center;
 	 	 	  font-size:20px;
 	 	    }
@@ -25,7 +24,6 @@
 	            color:white;
 	            
 	        }
-	        
 	        th, td {
 	            border: 1px solid white;
 	            padding: 10px;
@@ -57,12 +55,11 @@
 </style>
 </head>
 <body>
-<div class="content">
-        <%
-        String username = (String) session.getAttribute("username");
-
-        if (username != null) {
-    %>
+	<div class="content">
+	<%
+	String username = (String) session.getAttribute("username");
+	if (username != null) {
+	%>
     <div class="content">
         <h1>Reservations of <%= username %></h1>
         <table>
@@ -89,10 +86,10 @@
                 </form>
                 </th>
                 <th>Comment</th>
-                <th>Actions</th>
+                <th>Action</th>
             </tr>
             <%
-            	@SuppressWarnings("unchecked")
+        		@SuppressWarnings("unchecked")
                 List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
                 if (reservations != null && !reservations.isEmpty()) {
                     for (Reservation reservation : reservations) {
@@ -117,15 +114,15 @@
                                 priorityClass = "";
                         }
             %>
-            <tr>
-                <td class="<%= priorityClass %>"><%= reservation.getProfessor() %></td>
-                <td class="<%= priorityClass %>"><%= reservation.getDate() %></td>
-                <td class="<%= priorityClass %>"><%= reservation.getTime() %></td>
-                <td class="<%= priorityClass %>"><%= reservation.getRoom() %></td>
-                <td class="<%= priorityClass %>"><%= reservation.isAccepted() ? "yes" : "no" %></td>
-                <td class="<%= priorityClass %>"><%= reservation.getPriority() %></td>
-                <td class="<%= priorityClass %>"><%= reservation.getComment() %></td>
-                 <td>
+            <tr class="<%= priorityClass %>" style="text-align:center;">
+                <td><%= reservation.getProfessor() %></td>
+                <td><%= reservation.getDate() %></td>
+                <td><%= reservation.getTime() %></td>
+                <td><%= reservation.getRoom() %></td>
+                <td><%= reservation.isAccepted() ? "yes" : "no" %></td>
+                <td><%= reservation.getPriority() %></td>
+                <td><%= reservation.getComment() %></td>
+                <td>
 				<form class="buttonForm2" action="<%=request.getContextPath()%>/StudentServlet" method="post" style="display:inline;">
 					<input type="hidden" name="action" value="deleteReservation">
 					<input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
@@ -148,7 +145,7 @@
     <%
         } else {
     %>
-    <p>Please <a href="LoginPage.jsp">login</a>.</p>
+    <p>Please <a href="login.jsp">login</a>.</p>
     <%
         }
     %>

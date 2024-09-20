@@ -4,20 +4,19 @@
 <%@ include file="topMenuStudent.jsp" %>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Make a Reservation</title>
-<link href="styles1.css" rel="stylesheet" type="text/css" >
-<script>
-// Script to set the min date to today's date
-window.onload = function() {
-    var today = new Date().toISOString().split('T')[0];  // Get today's date in 'YYYY-MM-DD' format
-    document.getElementById("reservation-date").setAttribute("min", today);  // Set min attribute
-};
-</script>
+	<meta charset="UTF-8">
+	<title>Make a Reservation</title>
+	<link href="styles1.css" rel="stylesheet" type="text/css" >
+	<script>
+		// Script to set the min date to today's date
+		window.onload = function() {
+		    var today = new Date().toISOString().split('T')[0];  // Get today's date in 'YYYY-MM-DD' format
+		    document.getElementById("reservation-date").setAttribute("min", today);  // Set min attribute
+		};
+	</script>
 </head>
 <body>
 <div class="contentReservation">
-
     <form id="reservation-form" class="reservation-form" autocomplete="off" action="<%=request.getContextPath()%>/StudentServlet" method="post">
         <input type="hidden" name="action" value="commitReservation" />
         <h1 class="a11y-hidden">Reservation Form</h1>
@@ -34,7 +33,6 @@ window.onload = function() {
                 <span class="required">Date</span>
             </label>
         </div>
-
 
         <div>
          <span class="required">Time</span>    
@@ -85,7 +83,6 @@ window.onload = function() {
                <option value="5">Επίλυση Αποριών</option>
            </select><br>
         </div>
-        
         <input type="submit" value="Make Reservation" />
     </form>
 </div>
