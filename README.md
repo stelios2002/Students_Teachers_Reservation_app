@@ -1,4 +1,3 @@
-Η εργασία είναι αναρτημένη και στο https://github.com/stelios2002/Students_Teachers_Reservation_app .
 Εργαλεία είναι ήδη εγκατεστημένα στο zip και στο ο server που χρησιμοποιείται βρίσκεται επίσης μέσα.
 Ο κώδικας για τη δημιουργία της βάσης δεν είναι αυτοματοποιημένος και βρίσκεται στο φάκελο:
 Reservation_App/src/main/webapp με όνομα reservation_app_schema.sql.
