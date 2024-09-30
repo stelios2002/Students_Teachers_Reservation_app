@@ -1,0 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%@ include file="topMenuProfessor.jsp" %>
+<%@ page import="java.util.List" %>
+<%@ page import="ReservationModule.utils.models.Reservation" %>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Info Providing</title>
+<link href="styles1.css" rel="stylesheet" type="text/css" >
+</head>
+
+
+<body>
+
+<div style="margin-top: 100px;" class="content">
+
+<h2>Confirm Reservations</h2>
+
+<p>
+To confirm a reservation of a student, click on the <strong>"CONFRIM RESERVATIONS"</strong> button from the top menu.<br></br>
+Reservations are coloured differently based on their priority.<br></br>
+ΠΤΥΧΙΑΚΗ --> <strong style="color: red;">RED</strong><br></br>
+ΑΝΑΒΑΘΜΟΛΟΓΗΣΗ --> <strong style="color: orange;">ORANGE</strong><br></br>
+ΜΕΤΑΠΤΥΧΙΑΚΟ --> <strong style="color: yellow;"">YELLOW</strong><br></br>
+ERASMUS --> <strong style="color: blue;">BLUE</strong><br></br>
+ΕΠΙΛΥΣΗ ΑΠΟΡΙΩΝ --> <strong style="color: green;">GREEN</strong><br></br>
+ΑΛΛΟ --> <strong style="color: grey;">GREY</strong><br></br>
+</p>
+
+
+<h2>View Reservations</h2>
+
+<p>
+To view accepted reservations, click on the <strong>"RESERVATIONS"</strong> button from the top menu.<br></br>
+From there, you can update/edit each reservation or delete it if necessary. 
+</p>
+
+
+<h2>Set Availability</h2>
+
+<p>
+To set your availability, click on the <strong>"SET AVAILABILITY"</strong> button from the top menu.<br></br>
+Choose the day of the week and the time of your liking, to inform the students when you are available.
+</p>
+
+</div>
+
+
+</body>
